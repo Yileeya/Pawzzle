@@ -1,3 +1,4 @@
+@use "sass:map";
 // 定義斷點，參考 quasar
 // https://quasar.dev/style/visibility#window-width-related
 $breakpoints: (
@@ -10,7 +11,7 @@ $breakpoints: (
 
 // Mixins for breakpoints
 @mixin set-rwd($breakpoint) {
-  @media (max-width: map-get($breakpoints, $breakpoint)) {
+  @media (max-width: map.get($breakpoints, $breakpoint)) {
     @content;
   }
 }

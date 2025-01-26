@@ -1,27 +1,31 @@
+@use "theme.scss";
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
-@import "breakpoints.scss";
+
+/* 自定義 Scrollbar */
+@mixin scroll-bar-style {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #e0e0e0;
+  }
+}
+
+* {
+  @include scroll-bar-style;
+}
 
 body {
   font-family: "Noto Sans TC", serif;
   font-size: 16px;
   font-weight: 400;
-}
-
-/* 系統顏色 */
-:root {
-  // 覆蓋 quasar
-  --q-primary: #f9d673;
-  --q-secondary: #998e86;
-
-  // 自定義
-  --primary-color: #f9d673;
-  --primary-hover-color: #fffaf2;
-
-  --primary-light-color: #f8eecc;
-  --primary-light-hover-color: #f1dd9a;
-
-  --secondary-color: #998e86;
-  --secondary-dark-color: #89847f;
 }
 
 .max-page-width {

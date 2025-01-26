@@ -21,6 +21,13 @@ export default defineNuxtConfig({
           return code;
         }
       }
-    ]
+    ],
+    css:{
+      preprocessorOptions:{
+        scss:{
+          additionalData: '@use "@/assets/css/breakpoints.scss" as *;'
+        }
+      }
+    }
   }
 });
