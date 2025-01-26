@@ -8,15 +8,7 @@ function toggleLeftDrawer() {
 
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header>
-      <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
-
-        <q-toolbar-title>
-          header here
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-header>
+    <AppHeader @toggle="toggleLeftDrawer" />
 
     <q-drawer v-model="leftDrawerOpen" side="left" behavior="mobile">
       drawer content

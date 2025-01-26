@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+body {
+  font-family: "Noto Sans TC", serif;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* 系統顏色 */
+:root {
+  // 覆蓋 qussar
+  --q-primary: #F9D673;
+  --q-secondary: #998E86;
+
+  // 自定義
+  --primary-color: #F9D673;
+  --primary-hover-color: #FFFAF2;
+
+  --primary-light-color: #F8EECC;
+  --primary-light-hover-color: #F1DD9A;
+
+  --secondary-color: #998E86;
+}
+
+.q-menu {
+  border-radius: 10px;
+}
