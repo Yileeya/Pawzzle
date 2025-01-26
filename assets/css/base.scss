@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
+@import "breakpoints.scss";
 
 body {
   font-family: "Noto Sans TC", serif;
@@ -8,18 +9,27 @@ body {
 
 /* 系統顏色 */
 :root {
-  // 覆蓋 qussar
-  --q-primary: #F9D673;
-  --q-secondary: #998E86;
+  // 覆蓋 quasar
+  --q-primary: #f9d673;
+  --q-secondary: #998e86;
 
   // 自定義
-  --primary-color: #F9D673;
-  --primary-hover-color: #FFFAF2;
+  --primary-color: #f9d673;
+  --primary-hover-color: #fffaf2;
 
-  --primary-light-color: #F8EECC;
-  --primary-light-hover-color: #F1DD9A;
+  --primary-light-color: #f8eecc;
+  --primary-light-hover-color: #f1dd9a;
 
-  --secondary-color: #998E86;
+  --secondary-color: #998e86;
+  --secondary-dark-color: #89847f;
+}
+
+.max-page-width {
+  max-width: 1439px;
+  margin: 0 auto;
+  @include set-rwd(md) {
+    padding: 0 30px;
+  }
 }
 
 .q-menu {

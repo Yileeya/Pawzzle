@@ -1,0 +1,16 @@
+// 定義斷點，參考 quasar
+// https://quasar.dev/style/visibility#window-width-related
+$breakpoints: (
+  xs: 599px,
+  sm: 1023px,
+  md: 1439px,
+  lg: 1919px,
+  xl: 1920px
+);
+
+// Mixins for breakpoints
+@mixin set-rwd($breakpoint) {
+  @media (max-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}

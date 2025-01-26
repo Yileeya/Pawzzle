@@ -18,6 +18,6 @@ function toggleLeftDrawer() {
       <slot />
     </q-page-container>
 
-    <q-footer> footer here </q-footer>
+    <AppFooter />
   </q-layout>
 </template>
