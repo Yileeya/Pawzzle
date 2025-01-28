@@ -1,9 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true },
+  devtools: {enabled: true},
   css: ['~/assets/css/base.scss'],
-  modules: ['@nuxt/eslint', 'nuxt-quasar-ui', 'nuxt-icons'],
+  modules: [
+    '@nuxt/eslint', 'nuxt-quasar-ui', 'nuxt-icons',
+    [
+      '@pinia/nuxt',
+      { autoImports: ['defineStore'] }
+    ]
+  ],
   quasar: {
     plugins: [
       'Dialog',
@@ -22,9 +28,9 @@ export default defineNuxtConfig({
         }
       }
     ],
-    css:{
-      preprocessorOptions:{
-        scss:{
+    css: {
+      preprocessorOptions: {
+        scss: {
           additionalData: '@use "@/assets/css/breakpoints.scss" as *;'
         }
       }
