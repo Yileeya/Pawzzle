@@ -10,6 +10,11 @@ export default defineNuxtConfig({
       { autoImports: ['defineStore'] }
     ]
   ],
+  runtimeConfig:{
+    public:{
+      apiUrl: process.env.NUXT_API_BASE_URL
+    }
+  },
   quasar: {
     plugins: [
       'Dialog',
