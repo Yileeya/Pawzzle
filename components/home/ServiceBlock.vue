@@ -27,12 +27,12 @@ function goToProductPage(id: number) {
     <div class="card-content">
       <div class="title">
         <h6>{{ service.display_name }}</h6>
-        <span class="time font-sm-size gray-text">
+        <span class="time gray-text">
           <nuxt-icon name="clock" filled />
           美容時間約{{ service.time }}分鐘
         </span>
       </div>
-      <ul class="description-list font-sm-size">
+      <ul class="description-list">
         <li
           v-for="(item, idx) in service.describe"
           :key="`${service.name}_describe_${idx}`"
@@ -40,7 +40,7 @@ function goToProductPage(id: number) {
           {{ item }}
         </li>
       </ul>
-      <ul v-if="service.has_bath_products" class="bath-product font-sm-size">
+      <ul v-if="service.has_bath_products" class="bath-product">
         <li
           v-for="bathProduct in bathProducts"
           :key="`${service.name}_bath_${bathProduct.id}`"
@@ -77,9 +77,6 @@ function goToProductPage(id: number) {
   h5,
   h6 {
     margin: 0;
-  }
-  .font-sm-size {
-    font-size: 0.875rem;
   }
   .gray-text {
     color: var(--gray-color);
@@ -133,7 +130,7 @@ function goToProductPage(id: number) {
         background-color: #FCEED4;
         border-radius: 10px;
         padding: 0 10px;
-        width: 140px;
+        width: 155px;
         display: flex;
         justify-content: space-between;
       }

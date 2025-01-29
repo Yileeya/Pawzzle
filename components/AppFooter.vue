@@ -25,7 +25,7 @@ const socialMedias = [
 ];
 </script>
 <template>
-  <q-footer class="app-footer">
+  <div class="app-footer">
     <div class="max-page-width">
       <nuxt-icon name="logo" filled class="logo" />
       <div class="info-block">
@@ -51,7 +51,7 @@ const socialMedias = [
         </p>
       </div>
     </div>
-  </q-footer>
+  </div>
 </template>
 <style lang="scss">
 .app-footer {
@@ -59,6 +59,7 @@ const socialMedias = [
   min-height: 290px;
   display: flex;
   align-items: center;
+  background-color: var(--primary-color);
   @mixin icon-color {
     fill: var(--secondary-dark-color);
     &:hover {
