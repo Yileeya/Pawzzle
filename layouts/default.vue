@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IServicesApiData } from '@/stores/services';
-import type { IPetsCategory } from '@/stores/petsCategory';
+import type { IPetCategory } from '@/stores/petsCategory';
 
 const leftDrawerOpen = ref<boolean>(false);
 
@@ -25,8 +25,8 @@ await useAsyncData('servicesAndPetsCategory', async () => {
 
   const normalizedPetsCategory =
     petsCategory.status === 'fulfilled'
-      ? (petsCategory.value as IPetsCategory)
-      : { cats: [], dogs: [] };
+      ? (petsCategory.value as IPetCategory[])
+      : [];
 
   setServicesApiData(normalizedServices);
   setPetsCategoryApiData(normalizedPetsCategory);

@@ -2,22 +2,31 @@ export interface IPetCategory {
   id: number;
   name: string;
   extra_price: Record<string, number>; // { "1": 100, "2": 200, "3": 300 }
-}
-
-export interface IPetsCategory {
-  cats: IPetCategory[];
-  dogs: IPetCategory[];
+  category: string;
 }
 
 export const usePetsCategoryStore = defineStore('petsCategory', () => {
-  const pets = ref<IPetsCategory>({
-    cats: [],
-    dogs: []
-  });
+  const pets = ref<IPetCategory[]>([]);
 
-  function setPetsCategoryApiData(data: IPetsCategory) {
+  // select 選擇
+  const selectedId = ref<number | null>(null);
+  const selectedPet = ref<IPetCategory | null>(null);
+
+  function setPetsCategoryApiData(data: IPetCategory[]) {
     pets.value = data;
   }
 
-  return { pets, setPetsCategoryApiData };
+  function setSelectedPet(data: IPetCategory | null) {
+    if (!data) selectedId.value = null;
+    else selectedId.value = data.id;
+    selectedPet.value = data;
+  }
+
+  return {
+    pets,
+    selectedId,
+    selectedPet,
+    setPetsCategoryApiData,
+    setSelectedPet
+  };
 });

@@ -4,8 +4,9 @@ import type { IService, IBathProduct } from '@/stores/services';
 interface Props {
   service: IService;
   bathProducts: IBathProduct[];
+  extraPrice: number;
 }
-defineProps<Props>();
+const {extraPrice = 0} = defineProps<Props>();
 
 // format currency
 const { formatCurrency } = useCurrency();
@@ -53,7 +54,7 @@ function goToProductPage(id: number) {
       </ul>
     </div>
     <div class="reserve-block basic-width">
-      <h5>{{ formatCurrency(service.price) }}</h5>
+      <h5>{{ formatCurrency(service.price + extraPrice) }}</h5>
       <q-btn unelevated class="reserve-btn" @click="goToProductPage(service.id)">
         <div>馬上預約</div>
         <nuxt-icon name="arrow-right" filled class="arrow-right" />
