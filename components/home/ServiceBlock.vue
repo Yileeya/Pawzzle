@@ -8,9 +8,6 @@ interface Props {
 }
 const {extraPrice = 0} = defineProps<Props>();
 
-// format currency
-const { formatCurrency } = useCurrency();
-
 // 跳轉至產品頁
 function goToProductPage(id: number) {
   navigateTo(`/product/${id}`);
@@ -54,7 +51,7 @@ function goToProductPage(id: number) {
       </ul>
     </div>
     <div class="reserve-block basic-width">
-      <h5>{{ formatCurrency(service.price + extraPrice) }}</h5>
+      <h5>{{ foramtCurrency(service.price + extraPrice) }}</h5>
       <q-btn unelevated class="reserve-btn" @click="goToProductPage(service.id)">
         <div>馬上預約</div>
         <nuxt-icon name="arrow-right" filled class="arrow-right" />
