@@ -40,5 +40,22 @@ export default defineNuxtConfig({
         }
       }
     }
+  },
+  app:{
+    head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+      title: 'Pawzzle Studio',
+      meta: [
+        {'name': 'description', 'content': 'Pawzzle Studio提供專業的美容服務，讓您的毛孩子展現最美的一面，成為家庭中最閃亮的一部分。'},
+        {'property': 'og:title', 'content': 'Pawzzle Studio'},
+        {'property': 'og:description', 'content': 'Pawzzle Studio提供專業的美容服務，讓您的毛孩子展現最美的一面，成為家庭中最閃亮的一部分。'},
+        {'property': 'og:image', 'content': '/images/banner1.jpg'}
+        // {"property": "og:url", "content": "https://nuxtjs.org"}
+      ],
+      link: [
+        {rel: 'icon', href: '/favicon.ico'}
+      ]
+    }
   }
 });

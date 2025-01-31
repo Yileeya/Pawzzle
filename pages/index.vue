@@ -1,4 +1,7 @@
 <script setup>
+useSeoMeta({
+  title: 'Pawzzle Studio 首頁'
+});
 const servicesStore = useServicesStore();
 const { services, bathProducts, notices } = storeToRefs(servicesStore);
 const petsCategoryStore = usePetsCategoryStore();
