@@ -29,6 +29,7 @@ const { selectedPet } = storeToRefs(petsCategoryStore);
           :service="service"
           :bath-products="bathProducts"
           :extra-price="selectedPet?.extra_price[service.id] || 0"
+          data-aos="fade-up"
         />
       </div>
     </section>
@@ -36,7 +37,7 @@ const { selectedPet } = storeToRefs(petsCategoryStore);
       <div class="max-page-width">
         <q-separator />
         <h6 class="text-center">注意事項</h6>
-        <ul class="notice-list">
+        <ul class="notice-list" data-aos="fade-in">
           <li v-for="(notice, idx) in notices" :key="`notice_${idx}`">
             {{ notice }}
           </li>

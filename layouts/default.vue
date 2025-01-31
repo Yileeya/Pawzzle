@@ -36,6 +36,9 @@ await useAsyncData('servicesAndPetsCategory', async () => {
     petsCategory: normalizedPetsCategory
   };
 });
+
+// scroll to top
+const { showButton, scrollToTop } = useScrollToTop();
 </script>
 
 <template>
@@ -47,9 +50,40 @@ await useAsyncData('servicesAndPetsCategory', async () => {
     </q-drawer>
 
     <q-page-container>
+      <!--scroll-to-top-btn高度判定-->
+      <div id="scrollTarget"/>
       <slot />
     </q-page-container>
 
     <AppFooter />
+    <nuxt-icon
+      name="go-to-top"
+      filled
+      class="scroll-to-top"
+      :class="{ show: showButton }"
+      @click="scrollToTop"
+    />
   </q-layout>
 </template>
+
+<style scoped lang="scss">
+.scroll-to-top {
+  font-size: 75px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+  :deep(svg) {
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 100%;
+  }
+  &.show {
+    opacity: 1;
+  }
+  &:hover {
+    color: var(--gray-color);
+  }
+}
+</style>
