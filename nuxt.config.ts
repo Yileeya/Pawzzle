@@ -4,10 +4,10 @@ export default defineNuxtConfig({
   devtools: {enabled: true},
   css: ['~/assets/css/base.scss'],
   modules: [
-    '@nuxt/eslint', 'nuxt-quasar-ui', 'nuxt-icons',
+    '@nuxt/eslint', 'nuxt-quasar-ui', 'nuxt-icons', 'nuxt-aos',
     [
       '@pinia/nuxt',
-      { autoImports: ['defineStore'] }
+      { autoImports: ['defineStore', 'storeToRefs'] }
     ]
   ],
   runtimeConfig:{
