@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import scrollToElement from '@/utils/scroll-to-element';
+
 const emit = defineEmits(['toggle']);
-function routerTo(route: string = ''){
+
+function routerTo(route: string = '', isScroll = false){
   navigateTo(`/${route}`);
+  if(isScroll) scrollToElement();
 }
 </script>
 
@@ -20,7 +24,7 @@ function routerTo(route: string = ''){
       <q-toolbar-title>
         <div>
           <nuxt-icon name="logo" filled class="logo" @click="routerTo('')"/>
-          <a class="router-link" @click="routerTo('')">美容服務</a>
+          <a class="router-link" @click="routerTo('', true)">美容服務</a>
         </div>
         <q-btn-dropdown flat class="user-dropdown-btn">
           <template #label>

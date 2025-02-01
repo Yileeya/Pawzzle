@@ -1,9 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import scrollToElement from '@/utils/scroll-to-element';
+</script>
 <template>
   <div class="carousel-slogan">
     <nuxt-icon name="logo" filled class="logo" />
     <h4>把生活的最後一塊拼圖交給我們</h4>
-    <nuxt-icon name="reserve-now" filled class="reserve-now" />
+    <nuxt-icon name="reserve-now" filled class="reserve-now" @click="scrollToElement()"/>
   </div>
 </template>
 <style scoped lang="scss">

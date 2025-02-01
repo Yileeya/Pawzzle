@@ -11,7 +11,7 @@ const { selectedPet } = storeToRefs(petsCategoryStore);
 <template>
   <div class="home-page">
     <HomeCarousel />
-    <section class="max-page-width main-content">
+    <section id="ServiceBlock" class="max-page-width main-content">
       <h5 class="text-center">美容服務</h5>
       <div class="pet-select-block">
         <h6>要美容的寶貝是？</h6>
