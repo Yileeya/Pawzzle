@@ -20,7 +20,6 @@ export default defineNuxtConfig({
       'Dialog',
       'Loading'
     ],
-    sassVariables: '@/assets/css/variables.scss',
     config: {
       dark: false,
       brand:{
@@ -65,5 +64,8 @@ export default defineNuxtConfig({
         {rel: 'icon', href: '/favicon.ico'}
       ]
     }
+  },
+  features:{ //https://github.com/nuxt/nuxt/discussions/15915#discussioncomment-9772787
+    inlineStyles: false
   }
 });
