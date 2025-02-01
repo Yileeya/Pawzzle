@@ -2,10 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: {enabled: true},
-  css: [
-    'quasar/dist/quasar.prod.css',
-    '@/assets/css/base.scss'
-  ],
+  css: ['@/assets/css/base.scss'],
   modules: [
     '@nuxt/eslint', 'nuxt-quasar-ui', 'nuxt-icons', 'nuxt-aos',
     [
@@ -22,7 +19,15 @@ export default defineNuxtConfig({
     plugins: [
       'Dialog',
       'Loading'
-    ]
+    ],
+    sassVariables: '@/assets/css/variables.scss',
+    config: {
+      dark: false,
+      brand:{
+        primary: '#f9d673',
+        secondary: '#998e86'
+      }
+    }
   },
   vite: { //https://github.com/gitFoxCode/nuxt-icons/issues/56#issuecomment-2457905778
     plugins: [
