@@ -188,6 +188,9 @@ function goToProductPage(id: number) {
     .basic-width {
       width: 100%;
     }
+    .card-content .bath-product .tag {
+      flex: 0 0 135px;
+    }
     .service-icon {
       :deep(.nuxt-icon svg) {
         max-height: 75px;
