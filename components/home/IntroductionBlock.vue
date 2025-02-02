@@ -15,21 +15,35 @@
   height: 250px;
   display: flex;
   align-items: center;
+  overflow: hidden;
 
   &::before {
     content: "";
-    width: 40%;
+    width: 100%;
     height: 100%;
+    max-width: 600px;
     background-image: url('/images/introduction-bg.png');
     background-repeat: no-repeat;
     background-position: left;
+    background-size: cover;
   }
 
   .content {
+    margin: auto;
     p {
       margin: 0;
       line-height: 2;
       letter-spacing: 1px;
+    }
+  }
+  @include set-rwd(lg) {
+    .content {
+      padding: 0 30px;
+    }
+  }
+  @include set-rwd(sm) {
+    &::before {
+      content: none;
     }
   }
 }

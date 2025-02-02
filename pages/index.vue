@@ -64,14 +64,15 @@ const { selectedPet } = storeToRefs(petsCategoryStore);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 15px;
     background-color: var(--secondary-color);
     color: white;
-    height: 60px;
+    min-height: 60px;
     border-radius: 10px;
     box-shadow: 5px 5px 15px 0 rgba(0, 0, 0, 0.2);
     margin-bottom: 60px;
-    :deep(.pet-category-select){
+    :deep(.pet-category-select) {
       width: 250px;
     }
     :deep(.pet-icon) {
@@ -110,6 +111,24 @@ const { selectedPet } = storeToRefs(petsCategoryStore);
       position: absolute;
       bottom: 0;
       z-index: -1;
+    }
+  }
+  @include set-rwd(md) {
+    h5 {
+      margin: 2rem 0;
+    }
+  }
+  @include set-rwd(sm) {
+    .pet-select-block {
+      padding: 10px;
+      margin-bottom: 30px;
+      .pet-icon {
+        display: none;
+      }
+    }
+    .notice-block .notice-list {
+      width: 100%;
+      padding-left: 15px;
     }
   }
 }

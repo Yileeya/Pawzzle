@@ -39,7 +39,7 @@ const autoplay = ref<boolean>(true);
     color: var(--primary-color);
   }
   @include set-rwd(md){
-    height: 50vh;
+    height: 45vh;
     min-height: 300px;
   }
 }
