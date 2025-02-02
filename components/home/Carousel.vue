@@ -10,6 +10,7 @@ const autoplay = ref<boolean>(true);
     arrows
     navigation
     infinite
+    swipeable
     :autoplay="autoplay"
     transition-prev="slide-right"
     transition-next="slide-left"
@@ -39,7 +40,7 @@ const autoplay = ref<boolean>(true);
     color: var(--primary-color);
   }
   @include set-rwd(md){
-    height: 50vh;
+    height: 45vh;
     min-height: 300px;
   }
 }

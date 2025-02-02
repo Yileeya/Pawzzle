@@ -6,7 +6,7 @@ interface Props {
   bathProducts: IBathProduct[];
   extraPrice: number;
 }
-const {extraPrice = 0} = defineProps<Props>();
+const { extraPrice = 0 } = defineProps<Props>();
 
 // 跳轉至產品頁
 function goToProductPage(id: number) {
@@ -52,7 +52,11 @@ function goToProductPage(id: number) {
     </div>
     <div class="reserve-block basic-width">
       <h5>{{ foramtCurrency(service.price + extraPrice) }}</h5>
-      <q-btn unelevated class="reserve-btn" @click="goToProductPage(service.id)">
+      <q-btn
+        unelevated
+        class="reserve-btn"
+        @click="goToProductPage(service.id)"
+      >
         <div>馬上預約</div>
         <nuxt-icon name="arrow-right" filled class="arrow-right" />
       </q-btn>
@@ -66,6 +70,7 @@ function goToProductPage(id: number) {
   box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.1);
   padding: 15px;
   display: flex;
+  flex-wrap: wrap;
   gap: 30px;
   margin: 15px 0;
   min-height: 200px;
@@ -122,13 +127,14 @@ function goToProductPage(id: number) {
       li {
         margin: 5px 0;
         display: flex;
+        align-items: baseline;
         gap: 5px;
       }
       .tag {
-        background-color: #FCEED4;
+        background-color: #fceed4;
         border-radius: 10px;
         padding: 0 10px;
-        width: 155px;
+        flex: 0 0 155px;
         display: flex;
         justify-content: space-between;
       }
@@ -169,6 +175,26 @@ function goToProductPage(id: number) {
         .arrow-right {
           width: 20px;
         }
+      }
+    }
+  }
+  @include set-rwd(md) {
+    .basic-width {
+      width: 150px;
+    }
+  }
+  @include set-rwd(sm) {
+    flex-direction: column;
+    .basic-width {
+      width: 100%;
+    }
+    .card-content .bath-product .tag {
+      flex: 0 0 135px;
+    }
+    .service-icon {
+      :deep(.nuxt-icon svg) {
+        max-height: 75px;
+        padding: 10px;
       }
     }
   }
