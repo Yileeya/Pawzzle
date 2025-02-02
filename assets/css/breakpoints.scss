@@ -2,11 +2,11 @@
 // 定義斷點，參考 quasar
 // https://quasar.dev/style/visibility#window-width-related
 $breakpoints: (
-  xs: 599px,
-  sm: 1023px,
-  md: 1439px,
-  lg: 1919px,
-  xl: 1920px
+  xs: 576px,
+  sm: 768px,
+  md: 1023px,
+  lg: 1439px,
+  xl: 1919px
 );
 
 // Mixins for breakpoints
