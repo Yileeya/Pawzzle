@@ -10,6 +10,7 @@ const autoplay = ref<boolean>(true);
     arrows
     navigation
     infinite
+    swipeable
     :autoplay="autoplay"
     transition-prev="slide-right"
     transition-next="slide-left"
