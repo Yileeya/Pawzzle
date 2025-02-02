@@ -1,32 +1,26 @@
 <script setup lang="ts">
-import type { IServicesApiData } from '@/stores/services';
-import type { IPetCategory } from '@/stores/petsCategory';
-
-const leftDrawerOpen = ref<boolean>(false);
-
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
+import type {IServicesApiData} from '@/stores/services';
+import type {IPetCategory} from '@/stores/petsCategory';
 
 // api fetch
-const { setServicesApiData } = useServicesStore();
-const { setPetsCategoryApiData } = usePetsCategoryStore();
+const {setServicesApiData} = useServicesStore();
+const {setPetsCategoryApiData} = usePetsCategoryStore();
 
-const { $api } = useNuxtApp();
+const {$api} = useNuxtApp();
 
 await useAsyncData('servicesAndPetsCategory', async () => {
   const apis = [$api('/services'), $api('/petsCategory')];
   const [services, petsCategory] = await Promise.allSettled(apis);
 
   const normalizedServices =
-    services.status === 'fulfilled'
-      ? (services.value as IServicesApiData)
-      : { services: [], bath_products: [], notices: [] };
+        services.status === 'fulfilled'
+          ? (services.value as IServicesApiData)
+          : {services: [], bath_products: [], notices: []};
 
   const normalizedPetsCategory =
-    petsCategory.status === 'fulfilled'
-      ? (petsCategory.value as IPetCategory[])
-      : [];
+        petsCategory.status === 'fulfilled'
+          ? (petsCategory.value as IPetCategory[])
+          : [];
 
   setServicesApiData(normalizedServices);
   setPetsCategoryApiData(normalizedPetsCategory);
@@ -38,24 +32,20 @@ await useAsyncData('servicesAndPetsCategory', async () => {
 });
 
 // scroll to top
-const { showButton, scrollToTop } = useScrollToTop();
+const {showButton, scrollToTop} = useScrollToTop();
 </script>
 
 <template>
   <q-layout view="hHh lpR fFf">
-    <AppHeader @toggle="toggleLeftDrawer" />
-
-    <q-drawer v-model="leftDrawerOpen" side="left" behavior="mobile">
-      drawer content
-    </q-drawer>
+    <AppHeader/>
 
     <q-page-container>
       <!--scroll-to-top-btn高度判定-->
       <div id="scrollTarget"/>
-      <slot />
+      <slot/>
     </q-page-container>
 
-    <AppFooter />
+    <AppFooter/>
     <nuxt-icon
       name="go-to-top"
       filled
@@ -67,6 +57,12 @@ const { showButton, scrollToTop } = useScrollToTop();
 </template>
 
 <style scoped lang="scss">
+.q-page-container{
+  min-height: calc(100vh - 88px - 290px);
+  @include set-rwd(md){
+    min-height: 100vh;
+  }
+}
 .scroll-to-top {
   font-size: 75px;
   position: fixed;

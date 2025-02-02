@@ -93,6 +93,7 @@ const socialMedias = [
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: baseline;
+      row-gap: 5px;
       .social-media-block {
         display: flex;
         gap: 10px;
@@ -116,6 +117,28 @@ const socialMedias = [
     height: 50%;
     background-image: url('/images/footer-bg.svg');
     background-repeat: no-repeat;
+  }
+  @include set-rwd(md) {
+    min-height: auto;
+    padding: 30px 0 15px;
+    .max-page-width {
+      .logo svg {
+        height: 30px;
+      }
+      .footer-bottom .copy-right {
+        margin: 0;
+      }
+    }
+  }
+  @include set-rwd(sm) {
+    .max-page-width {
+      .logo svg {
+        margin-bottom: 10px;
+      }
+      .q-separator {
+        margin: 15px 0;
+      }
+    }
   }
 }
 </style>

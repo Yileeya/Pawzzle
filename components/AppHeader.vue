@@ -1,35 +1,24 @@
 <script setup lang="ts">
 import scrollToElement from '@/utils/scroll-to-element';
 
-const emit = defineEmits(['toggle']);
-
-function routerTo(route: string = '', isScroll = false){
+function routerTo(route: string = '', isScroll = false) {
   navigateTo(`/${route}`);
-  if(isScroll) scrollToElement();
+  if (isScroll) scrollToElement();
 }
 </script>
 
 <template>
   <q-header class="app-header bg-secondary">
-    <q-toolbar>
-      <q-btn
-        class="lt-md"
-        dense
-        flat
-        round
-        icon="menu"
-        @click="emit('toggle')"
-      />
-
+    <q-toolbar class="max-page-width">
       <q-toolbar-title>
         <div>
-          <nuxt-icon name="logo" filled class="logo" @click="routerTo('')"/>
+          <nuxt-icon name="logo" filled class="logo" @click="routerTo('')" />
           <a class="router-link" @click="routerTo('', true)">美容服務</a>
         </div>
         <q-btn-dropdown flat class="user-dropdown-btn">
           <template #label>
             <q-avatar size="xl">
-              <img src="/images/user-avatar.png" alt="user-avatar">
+              <img src="/images/user-avatar.png" alt="user-avatar" >
             </q-avatar>
           </template>
           <q-list class="user-dropdown-list">
@@ -58,7 +47,6 @@ function routerTo(route: string = '', isScroll = false){
   height: 88px;
   .q-toolbar {
     height: 100%;
-    padding: 0 100px;
     &__title {
       display: flex;
       align-items: center;
@@ -89,6 +77,32 @@ function routerTo(route: string = '', isScroll = false){
       }
       .user-dropdown-btn {
         border-radius: 10px;
+      }
+    }
+    @media (min-width: 1439px) {
+      padding: 0;
+    }
+  }
+  @include set-rwd(sm) {
+    height: 50px;
+    .q-toolbar {
+      &__title {
+        .logo svg {
+          max-height: 20px;
+        }
+        .router-link {
+          display: none;
+        }
+        .user-dropdown-btn {
+          padding: 0;
+          max-height: 42px;
+          .q-avatar {
+            transform: scale(0.75);
+          }
+          .q-btn-dropdown__arrow {
+            margin-left: 0;
+          }
+        }
       }
     }
   }
@@ -123,6 +137,11 @@ function routerTo(route: string = '', isScroll = false){
     padding: 0 10px;
     .nuxt-icon {
       fill: var(--secondary-color);
+    }
+  }
+  @include set-rwd(sm) {
+    .q-item {
+      min-height: 30px;
     }
   }
 }

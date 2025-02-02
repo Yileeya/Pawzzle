@@ -40,7 +40,7 @@ body {
 .max-page-width {
   max-width: 1439px;
   margin: 0 auto;
-  @include set-rwd(md) {
+  @include set-rwd(lg) {
     padding: 0 30px;
   }
 }
