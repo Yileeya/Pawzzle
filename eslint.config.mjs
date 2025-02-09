@@ -9,6 +9,12 @@ export default withNuxt(
       'semi': ['error', 'always'], // 語句的結尾分號
       'quotes': ['error', 'single'],  // 使用單引號，不是雙引號
       'comma-dangle': ['error', 'never'], // Object、Array 內的元素不需要尾隨逗號
+
+      'object-curly-spacing': ['error', 'always'], // Object 的花括號內需要空格
+      'array-bracket-spacing': ['error', 'never'], // Array 的方括號內不需要空格
+      'computed-property-spacing': ['error', 'never'], // computed property 的方括號內不需要空格
+      'block-spacing': ['error', 'always'], // 語句塊的花括號內需要空格
+      'space-in-parens': ['error', 'never'], // 小括號內不需要空格
       
       'indent': ['error', 2], // 2個空格進行縮排
       'vue/html-indent': ['error', 2], // 2個空格進行縮排
