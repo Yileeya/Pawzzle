@@ -33,7 +33,7 @@ body {
   font-weight: 400;
   color: var(--secondary-color);
   letter-spacing: 1px;
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: "Noto Sans TC", sans-serif;
   font-size: 1rem;
 }
 
@@ -47,4 +47,36 @@ body {
 
 .q-menu {
   border-radius: 10px;
+}
+
+.tag-container-ul {
+  list-style-type: none;
+  padding-left: 0;
+
+  li {
+    margin: 5px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+  }
+
+  .tag {
+    background-color: #fceed4;
+    border-radius: 10px;
+    padding: 0 10px;
+    flex: 0 0 155px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .text {
+    color: var(--gray-color);
+    font-weight: 300;
+  }
+
+  @include set-rwd(sm) {
+    .tag {
+      flex: 0 0 135px;
+    }
+  }
 }
