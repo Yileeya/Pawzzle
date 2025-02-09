@@ -45,6 +45,10 @@ body {
   }
 }
 
+.m-0 {
+  margin: 0;
+}
+
 .q-menu {
   border-radius: 10px;
 }
@@ -77,6 +81,23 @@ body {
   @include set-rwd(sm) {
     .tag {
       flex: 0 0 135px;
+    }
+  }
+}
+
+.q-field--rounded {
+  .q-field__control {
+    background: var(--primary-hover-color);
+    padding: 0 1rem;
+    &::before {
+      border: none;
+    }
+    &:hover:before {
+      border: 1px solid;
+    }
+    .q-field__native {
+      color: var(--secondary-color);
+      font-size: 1rem;
     }
   }
 }

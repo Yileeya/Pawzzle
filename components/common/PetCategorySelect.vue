@@ -68,17 +68,6 @@ function selectOption(data: IPetCategory) {
 
 <style lang="scss">
 .pet-category-select {
-  .q-field__control {
-    background-color: var(--primary-hover-color);
-    padding: 0 1rem;
-    &:before {
-      border: 1px solid transparent;
-    }
-    .q-field__native{
-      color: var(--secondary-color);
-      font-size: 1rem;
-    }
-  }
   .q-field__control:hover {
     transition: border-color 0.36s cubic-bezier(0.4, 0, 0.2, 1);
     &:before {
