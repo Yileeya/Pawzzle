@@ -32,5 +32,9 @@ export const useServicesStore = defineStore('services', () => {
     notices.value = data.notices;
   }
 
-  return { services, bathProducts, notices, setServicesApiData };
+  function getServiceById(id: number) {
+    return services.value.find((service) => service.id === id) || null;
+  }
+
+  return { services, bathProducts, notices, setServicesApiData, getServiceById };
 });
