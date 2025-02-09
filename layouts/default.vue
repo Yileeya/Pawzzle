@@ -58,7 +58,7 @@ const { showButton, scrollToTop } = useScrollToTop();
 
 <style scoped lang="scss">
 .q-page-container {
-  min-height: calc(100vh - 88px - 290px);
+  min-height: calc(100vh - 290px);
   @include set-rwd(md) {
     min-height: 100vh;
   }
