@@ -38,7 +38,7 @@ function goToProductPage(id: number) {
           {{ item }}
         </li>
       </ul>
-      <ul v-if="service.has_bath_products" class="bath-product">
+      <ul v-if="service.has_bath_products" class="tag-container-ul">
         <li
           v-for="bathProduct in bathProducts"
           :key="`${service.name}_bath_${bathProduct.id}`"
@@ -46,7 +46,7 @@ function goToProductPage(id: number) {
           <div class="tag">
             {{ bathProduct.name }} <span>+{{ bathProduct.price }}</span>
           </div>
-          <div class="gray-text">{{ bathProduct.describe }}</div>
+          <div class="text">{{ bathProduct.describe }}</div>
         </li>
       </ul>
     </div>
@@ -121,27 +121,6 @@ function goToProductPage(id: number) {
       padding-left: 1rem;
       margin: 10px 0;
     }
-    .bath-product {
-      list-style-type: none;
-      padding-left: 0;
-      li {
-        margin: 5px 0;
-        display: flex;
-        align-items: baseline;
-        gap: 5px;
-      }
-      .tag {
-        background-color: #fceed4;
-        border-radius: 10px;
-        padding: 0 10px;
-        flex: 0 0 155px;
-        display: flex;
-        justify-content: space-between;
-      }
-      .gray-text {
-        font-weight: 300;
-      }
-    }
   }
   .reserve-block {
     display: flex;
@@ -187,9 +166,6 @@ function goToProductPage(id: number) {
     flex-direction: column;
     .basic-width {
       width: 100%;
-    }
-    .card-content .bath-product .tag {
-      flex: 0 0 135px;
     }
     .service-icon {
       :deep(.nuxt-icon svg) {
