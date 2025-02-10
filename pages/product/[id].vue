@@ -11,23 +11,6 @@ const { services, bathProducts } = storeToRefs(store);
 const { getServiceById } = store;
 const pageService = computed(() => getServiceById(Number(routes.params.id)));
 
-// form
-const form = ref({
-  user: {
-    name: "",
-    phone: "",
-  },
-  pet: {
-    name: "",
-    type: "",
-  },
-  serviceId: "",
-  bathId: "",
-  date: "",
-  timeRange: [],
-  price: "", // service price + pet price + bath price => 子組件計算 emit，父層slot
-});
-
 // 若輸入錯誤id，則導向id=1
 onMounted(() => {
   if (!pageService.value) navigateTo("/product/1", { replace: true });
@@ -42,7 +25,7 @@ onMounted(() => {
       :bath-products="bathProducts"
     />
     <section class="reserve-form-section">
-      <ProductBasicForm class="half-grid" />
+      <ProductBasicForm class="half-grid" :page-service="pageService" :bath-products="bathProducts"/>
       <ProductReserveForm class="half-grid" />
     </section>
   </div>
@@ -56,12 +39,12 @@ onMounted(() => {
     fill: white;
     border-radius: 15px;
     padding: 30px;
-    margin: 30px 0;
+    margin: 30px 0 4rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
     .half-grid {
       display: grid;
-      grid-template-rows: 1fr 100px;
+      grid-template-rows: 1fr 75px;
       .footer {
         border-top: 1px solid white;
       }
@@ -69,12 +52,6 @@ onMounted(() => {
     h6 {
       letter-spacing: 2px;
       font-weight: 500;
-    }
-    .input-group {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 5px;
     }
   }
 }
