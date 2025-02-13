@@ -65,7 +65,7 @@ body {
   }
 
   .tag {
-    background-color: #fceed4;
+    background-color: var(--primary-dark-hover-color);
     border-radius: 10px;
     padding: 0 10px;
     flex: 0 0 155px;
