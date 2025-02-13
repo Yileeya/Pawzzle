@@ -101,3 +101,71 @@ body {
     }
   }
 }
+
+.calendar-inline {
+  color: var(--secondary-color);
+  box-shadow: none;
+  border-radius: 10px;
+  width: 100%;
+  background-color: var(--primary-hover-color);
+  position: relative;
+  height: 370px;
+
+  .q-date__navigation { // 隱藏年份、月份
+    padding-bottom: 10px;
+    div:first-child {
+      justify-content: flex-start;
+    }
+    .q-date__arrow .q-icon {
+      font-size: 1.5rem;
+    }
+    :not(.q-date__arrow) button {
+      pointer-events: none;
+      opacity: 0;
+    }
+    > div:nth-last-child(-n + 3) {
+      display: none;
+    }
+  }
+
+  .q-date__actions { // 客製化月份
+    padding: 0;
+    .current-year-month-title {
+      position: absolute;
+      width: 130px;
+      top: 18px;
+      left: calc(50% - 65px);
+      text-align: center;
+      font-size: 1.125rem;
+    }
+  }
+
+  .q-date__calendar-weekdays {
+    border-bottom: 1px solid #998e8645;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    > div {
+      font-size: 1rem;
+      opacity: 1;
+    }
+  }
+
+  .q-date__calendar-days-container {
+    .q-date__calendar-item {
+      padding: 5px;
+      .q-btn {
+        font-size: 1rem;
+        width: 2rem;
+        height: 2rem;
+        line-height: 1.2;
+        &.bg-active {
+          background-color: var(--primary-dark-hover-color);
+        }
+      }
+    }
+  }
+
+  .q-ripple {
+    display: none !important;
+  }
+}
