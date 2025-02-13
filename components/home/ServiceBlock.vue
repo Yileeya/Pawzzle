@@ -46,7 +46,7 @@ function goToProductPage(id: number) {
           <div class="tag">
             {{ bathProduct.name }} <span>+{{ bathProduct.price }}</span>
           </div>
-          <div class="text">{{ bathProduct.describe }}</div>
+          <div class="text">{{ bathProduct.description }}</div>
         </li>
       </ul>
     </div>

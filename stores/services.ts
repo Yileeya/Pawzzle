@@ -12,7 +12,7 @@ export interface IBathProduct {
   id: number;
   name: string;
   price: number;
-  describe: string;
+  description: string;
 }
 
 export interface IServicesApiData {
