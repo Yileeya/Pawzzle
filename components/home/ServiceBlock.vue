@@ -38,7 +38,7 @@ function goToProductPage(id: number) {
           {{ item }}
         </li>
       </ul>
-      <ul v-if="service.has_bath_products" class="tag-container-ul">
+      <ul v-if="service.has_bath_products === 1" class="tag-container-ul">
         <li
           v-for="bathProduct in bathProducts"
           :key="`${service.name}_bath_${bathProduct.id}`"

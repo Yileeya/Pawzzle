@@ -5,7 +5,7 @@ export interface IService {
   time: number;
   price: number;
   describe: string[];
-  has_bath_products: boolean;
+  has_bath_products: 0 | 1;
 }
 
 export interface IBathProduct {
