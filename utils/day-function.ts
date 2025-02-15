@@ -54,4 +54,14 @@ function adjustDate(date: string | Date = new Date(), days: number = 0, format: 
   return dateObj.add(days, 'day').format(format);
 }
 
-export { generateTimeSlots, formatDate, adjustDate };
+/**
+ * 計算結束時間
+ * @param {string} startTime - 開始時間 (格式: "HH:mm")
+ * @param {number} duration - 總服務時間 (分鐘)
+ * @returns {string} - 計算後的結束時間 (格式: "HH:mm")
+ */
+function calculateEndTime(startTime: string = '09:00', duration: number) {
+  return dayjs(startTime, 'HH:mm').add(duration, 'minute').format('HH:mm');
+}
+
+export { generateTimeSlots, formatDate, adjustDate, calculateEndTime };

@@ -137,6 +137,7 @@ body {
       left: calc(50% - 65px);
       text-align: center;
       font-size: 1.125rem;
+      font-weight: 500;
     }
   }
 
@@ -160,6 +161,9 @@ body {
         line-height: 1.2;
         &.bg-active {
           background-color: var(--primary-dark-hover-color);
+        }
+        &.q-date__today {
+          box-shadow: none;
         }
       }
     }
