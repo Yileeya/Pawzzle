@@ -75,6 +75,7 @@ onMounted(() => {
             <q-input
               :model-value="dateAndTimes"
               :error="
+                !!errors['timePeriodStart'] ||
                 !!errors['isTimePeriodValid'] ||
                   !!errors['isBeforeCutoffTimeValid']
               "
