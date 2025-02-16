@@ -119,6 +119,9 @@ function replaceRoute(id: number) {
   .bath-products {
     .box {
       padding: 2px 15px;
+      li {
+        flex-wrap: wrap;
+      }
     }
     .tag {
       background-color: #fff5ce;

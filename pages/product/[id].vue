@@ -63,7 +63,6 @@ onMounted(() => {
       :page-service="pageService"
       :bath-products="bathProducts"
     />
-    errors: {{ errors }}
     <section class="reserve-form-section">
       <div class="left">
         <ProductBasicForm />
@@ -174,7 +173,8 @@ onMounted(() => {
     .footer {
       grid-column: span 2;
       display: flex;
-      gap: 40px;
+      column-gap: 40px;
+      row-gap: 15px;
       border-top: 1px solid white;
       padding-top: 15px;
       .price-block,
@@ -185,6 +185,7 @@ onMounted(() => {
         display: flex;
         justify-content: space-between;
         align-items: baseline;
+        flex-wrap: wrap;
         gap: 10px;
         font-size: 1.25rem;
         .number-text {
@@ -270,6 +271,43 @@ onMounted(() => {
         }
         &.disabled {
           background-color: var(--gray-color);
+        }
+      }
+    }
+  }
+  @include set-rwd(md) {
+    .reserve-form-section {
+      display: flex;
+      flex-direction: column;
+      .right {
+        order: 1;
+      }
+      .left {
+        order: 2;
+      }
+      .footer {
+        order: 3;
+        flex-wrap: wrap;
+      }
+    }
+  }
+  @include set-rwd(xs) {
+    .reserve-form-section {
+      padding: 15px 10px;
+      .detail{
+        display: none;
+      }
+      .input-group {
+        flex-direction: column;
+        label:first-child {
+          flex: 1;
+        }
+        .q-input,
+        .pet-category-select {
+          width: 100%;
+          .q-field__control {
+            border-radius: 10px;
+          }
         }
       }
     }

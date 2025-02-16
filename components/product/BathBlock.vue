@@ -44,5 +44,25 @@ function handleBathProductClick(bathItem: IBathProduct) {
   .check-box {
     padding: 10px 20px !important;
   }
+  @include set-rwd(md) {
+    padding-top: 0;
+    .check-box {
+      flex: 1;
+      max-width: 180px;
+      min-width: 160px;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+    }
+  }
+  @include set-rwd(xs) {
+    .input-group {
+      row-gap: 10px !important;
+      .check-box {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+  }
 }
 </style>
