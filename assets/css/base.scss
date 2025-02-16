@@ -18,6 +18,17 @@
   }
 }
 
+/* 適用於 Chrome、Safari、Edge、Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* 適用於 Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 * {
   @include scroll-bar-style;
 }
@@ -92,12 +103,31 @@ body {
     &::before {
       border: none;
     }
+    &::after {
+      transform: none;
+    }
     &:hover:before {
       border: 1px solid;
     }
     .q-field__native {
       color: var(--secondary-color);
       font-size: 1rem;
+    }
+  }
+
+  &.q-field--dense .q-field__bottom {
+    font-size: 0.875rem;
+  }
+
+  &.q-field--readonly {
+    .q-field__control {
+      background-color: #A39991;
+      &:before {
+        border-style: none;
+      }
+      .q-field__native {
+        color: white;
+      }
     }
   }
 }

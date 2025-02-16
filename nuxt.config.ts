@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: {enabled: true},
+  devtools: { enabled: false },
   css: ['@/assets/css/base.scss'],
   modules: [
     '@nuxt/eslint', 'nuxt-quasar-ui', 'nuxt-icons', 'nuxt-aos',
@@ -24,7 +24,8 @@ export default defineNuxtConfig({
       dark: false,
       brand:{
         primary: '#f9d673',
-        secondary: '#998e86'
+        secondary: '#998e86',
+        negative: '#8B0000'
       }
     }
   },
@@ -54,14 +55,14 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       title: 'Pawzzle Studio',
       meta: [
-        {'name': 'description', 'content': 'Pawzzle Studio提供專業的美容服務，讓您的毛孩子展現最美的一面，成為家庭中最閃亮的一部分。'},
-        {'property': 'og:title', 'content': 'Pawzzle Studio'},
-        {'property': 'og:description', 'content': 'Pawzzle Studio提供專業的美容服務，讓您的毛孩子展現最美的一面，成為家庭中最閃亮的一部分。'},
-        {'property': 'og:image', 'content': '/images/banner1.jpg'}
+        { 'name': 'description', 'content': 'Pawzzle Studio提供專業的美容服務，讓您的毛孩子展現最美的一面，成為家庭中最閃亮的一部分。' },
+        { 'property': 'og:title', 'content': 'Pawzzle Studio' },
+        { 'property': 'og:description', 'content': 'Pawzzle Studio提供專業的美容服務，讓您的毛孩子展現最美的一面，成為家庭中最閃亮的一部分。' },
+        { 'property': 'og:image', 'content': '/images/banner1.jpg' }
         // {"property": "og:url", "content": "https://nuxtjs.org"}
       ],
       link: [
-        {rel: 'icon', href: '/favicon.ico'}
+        { rel: 'icon', href: '/favicon.ico' }
       ]
     }
   },

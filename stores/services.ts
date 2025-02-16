@@ -32,8 +32,16 @@ export const useServicesStore = defineStore('services', () => {
     notices.value = data.notices;
   }
 
-  function getServiceById(id: number) {
-    return services.value.find((service) => service.id === id) || null;
+  function getServiceById(id: number): IService {
+    return services.value.find((service) => service.id === id) || {
+      id: 0,
+      name: '',
+      display_name: '',
+      time: 0,
+      price: 0,
+      describe: [],
+      has_bath_products: 0
+    };
   }
 
   return { services, bathProducts, notices, setServicesApiData, getServiceById };

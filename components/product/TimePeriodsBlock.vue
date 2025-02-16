@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 const { serviceTime = 30 } = defineProps<{
   serviceTime: number;
 }>();
+const emit = defineEmits(['timeValid']);
 const timePeriodStart = defineModel('timePeriodStart', { type: String });
 const isTimePeriodValid = defineModel('isTimePeriodValid', { type: Boolean });
 const isBeforeCutoffTimeValid = defineModel('isBeforeCutoffTimeValid', { type: Boolean });
@@ -41,6 +42,7 @@ watch(
   (newTimes) => {
     isTimePeriodValid.value = timesValidFunctions.notInDisabledTimes(newTimes);
     isBeforeCutoffTimeValid.value = timesValidFunctions.withinCutoffTime(newTimes);
+    emit('timeValid');
   }
 );
 </script>
@@ -80,35 +82,7 @@ watch(
   padding: 20px 0;
 
   .check-box {
-    color: white;
-    border-radius: 15px;
-    border: 1px solid;
-    padding: 5px 15px;
-    cursor: pointer;
-
-    input[type="radio"] {
-      display: none;
-    }
-
-    &.disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
-
-    &.active,
-    &:not(.disabled):hover {
-      background-color: var(--primary-dark-hover-color);
-      color: var(--secondary-color);
-    }
-
-    &.active {
-      &:not(.disabled):hover {
-        opacity: 0.9;
-      }
-      &.disabled {
-        background-color: var(--gray-color);
-      }
-    }
+    width: calc((100% / 6) - 25px);
   }
 }
 </style>

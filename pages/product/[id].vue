@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { IBathProduct } from '@/stores/services';
+
 useSeoMeta({
   title: 'Pawzzle Studio 美容服務'
 });
@@ -11,27 +13,102 @@ const { services, bathProducts } = storeToRefs(servicesStore);
 const { getServiceById } = servicesStore;
 const pageService = computed(() => getServiceById(Number(routes.params.id)));
 
+const petsCategoryStore = usePetsCategoryStore();
+const { selectedPet } = storeToRefs(petsCategoryStore);
+
 const reserveStore = useReserveFormStore();
-const { selectedDate, timePeriodStart, isTimePeriodValid, isBeforeCutoffTimeValid, errors, values } = storeToRefs(reserveStore);
-const { submit } = reserveStore;
+const {
+  selectedDate,
+  timePeriodStart,
+  isTimePeriodValid,
+  isBeforeCutoffTimeValid,
+  bathId,
+  errors
+} = storeToRefs(reserveStore);
+const { validateTimes, submit } = reserveStore;
+
+// 預約日期時段顯示
+const dateAndTimes = computed(() => {
+  if (!timePeriodStart.value) return `${selectedDate.value}`;
+
+  const endTime = calculateEndTime(
+    timePeriodStart.value,
+    pageService.value.time
+  );
+  const timeSlot = endTime ? `${timePeriodStart.value} - ${endTime}` : '';
+  return `${selectedDate.value}   ${timeSlot}`;
+});
+
+// 加值選購
+const selectedBathProduct = ref<IBathProduct | null>(null);
+function handleBathProductClick(bathItem: IBathProduct) {
+  if (selectedBathProduct.value?.id === bathItem.id) {
+    selectedBathProduct.value = null;
+  } else {
+    selectedBathProduct.value = bathItem;
+  }
+  bathId.value = selectedBathProduct.value?.id ?? null;
+}
 
 // 若輸入錯誤id，則導向id=1
 onMounted(() => {
-  if (!pageService.value) navigateTo('/product/1', { replace: true });
+  if (!pageService.value.id) navigateTo('/product/1', { replace: true });
 });
 </script>
 
 <template>
-  <div v-if="pageService" class="product-page max-page-width">
+  <div class="product-page max-page-width">
     <ProductServiceBlock
       :services="services"
       :page-service="pageService"
       :bath-products="bathProducts"
     />
+    errors: {{ errors }}
     <section class="reserve-form-section">
       <div class="left">
-        values: {{ values }}<br>
-        errors: {{ errors }}
+        <ProductBasicForm />
+        <div class="form-group">
+          <h6 class="m-0 sub-title">
+            <nuxt-icon name="puzzle-piece" class="puzzle-icon" filled />預約內容
+          </h6>
+          <div class="input-group">
+            <label>預約時段</label>
+            <q-input
+              :model-value="dateAndTimes"
+              :error="
+                !!errors['isTimePeriodValid'] ||
+                  !!errors['isBeforeCutoffTimeValid']
+              "
+              :error-message="
+                errors['timePeriodStart'] ||
+                  errors['isTimePeriodValid'] ||
+                  errors['isBeforeCutoffTimeValid']
+              "
+              hide-bottom-space
+              outlined
+              dense
+              rounded
+              readonly
+            />
+          </div>
+          <div class="input-group">
+            <label>預約內容</label>
+            <q-input
+              :model-value="pageService.display_name"
+              hide-bottom-space
+              outlined
+              dense
+              rounded
+              readonly
+            />
+          </div>
+        </div>
+        <ProductBathBlock
+          v-if="pageService.has_bath_products"
+          :bath-products="bathProducts"
+          :selected-id="bathId"
+          @update="handleBathProductClick"
+        />
       </div>
       <div class="right">
         <h6 class="m-0 sub-title">
@@ -43,9 +120,38 @@ onMounted(() => {
           v-model:is-time-period-valid="isTimePeriodValid"
           v-model:is-before-cutoff-time-valid="isBeforeCutoffTimeValid"
           :service-time="pageService.time"
+          @time-valid="validateTimes"
         />
       </div>
       <div class="footer">
+        <div class="price-block">
+          <div class="detail">
+            <span class="h4 number-text">
+              {{
+                foramtCurrency(
+                  pageService.price +
+                    (selectedPet?.extra_price[pageService.id] || 0)
+                )
+              }}
+            </span>
+            <span v-show="selectedBathProduct?.price" class="h6 number-text">
+              +{{ selectedBathProduct?.price }}
+            </span>
+          </div>
+          <div class="total">
+            總計
+            <span class="h4 number-text">
+              NT
+              {{
+                foramtCurrency(
+                  pageService.price +
+                    (selectedPet?.extra_price[pageService.id] || 0) +
+                    (selectedBathProduct?.price || 0)
+                )
+              }}
+            </span>
+          </div>
+        </div>
         <q-btn unelevated class="submit-btn" @click="submit"> 送出訂單 </q-btn>
       </div>
     </section>
@@ -63,14 +169,39 @@ onMounted(() => {
     margin: 30px 0 4rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    row-gap: 10px;
+    column-gap: 40px;
     .footer {
       grid-column: span 2;
       display: flex;
-      justify-content: flex-end;
+      gap: 40px;
       border-top: 1px solid white;
       padding-top: 15px;
+      .price-block,
       .submit-btn {
-        width: 50%;
+        flex: 1 1 50%;
+      }
+      .price-block {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+        font-size: 1.25rem;
+        .number-text {
+          letter-spacing: 3px;
+        }
+        .h4 {
+          font-size: 2rem;
+        }
+        .h6 {
+          color: var(--primary-color);
+          padding: 0 2px;
+        }
+        .total .h4 {
+          padding-left: 5px;
+        }
+      }
+      .submit-btn {
         background-color: var(--primary-color);
         color: var(--secondary-color);
         font-size: 1.125rem;
@@ -81,8 +212,65 @@ onMounted(() => {
     h6 {
       letter-spacing: 2px;
       font-weight: 500;
+      .puzzle-icon {
+        margin-right: 10px;
+        svg {
+          transform: rotate(270deg) translateX(2px);
+        }
+      }
       &.sub-title {
         margin-bottom: 10px;
+      }
+    }
+    .form-group {
+      margin: 30px 0;
+    }
+    .input-group {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+      label:first-child {
+        flex: 0 0 90px;
+      }
+      .q-input {
+        flex: 1;
+      }
+      :deep(.pet-category-select) {
+        flex: 0 0 210px;
+      }
+    }
+    .check-box {
+      color: white;
+      border-radius: 15px;
+      border: 1px solid;
+      padding: 5px 15px;
+      cursor: pointer;
+      text-align: center;
+
+      input[type="radio"] {
+        display: none;
+      }
+
+      &.disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      &.active,
+      &:not(.disabled):hover {
+        background-color: var(--primary-dark-hover-color);
+        color: var(--secondary-color);
+      }
+
+      &.active {
+        &:not(.disabled):hover {
+          opacity: 0.9;
+        }
+        &.disabled {
+          background-color: var(--gray-color);
+        }
       }
     }
   }
