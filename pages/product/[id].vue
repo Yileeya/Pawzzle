@@ -25,7 +25,7 @@ const {
   bathId,
   errors
 } = storeToRefs(reserveStore);
-const { validateTimes, submit } = reserveStore;
+const { validateTimes, clearAllErrorMsg, submit } = reserveStore;
 
 // 預約日期時段顯示
 const dateAndTimes = computed(() => {
@@ -53,6 +53,8 @@ function handleBathProductClick(bathItem: IBathProduct) {
 // 若輸入錯誤id，則導向id=1
 onMounted(() => {
   if (!pageService.value.id) navigateTo('/product/1', { replace: true });
+  clearAllErrorMsg();
+  validateTimes();
 });
 </script>
 
@@ -75,7 +77,8 @@ onMounted(() => {
             <q-input
               :model-value="dateAndTimes"
               :error="
-                !!errors['isTimePeriodValid'] ||
+                !!errors['timePeriodStart'] ||
+                  !!errors['isTimePeriodValid'] ||
                   !!errors['isBeforeCutoffTimeValid']
               "
               :error-message="

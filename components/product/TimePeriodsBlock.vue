@@ -38,10 +38,10 @@ const timesValidFunctions = {
   }
 };
 watch(
-  () => [keepTimes.value, serviceTime],
-  () => {
-    isTimePeriodValid.value = timesValidFunctions.notInDisabledTimes(keepTimes.value);
-    isBeforeCutoffTimeValid.value = timesValidFunctions.withinCutoffTime(keepTimes.value);
+  () => keepTimes.value,
+  (newTimes) => {
+    isTimePeriodValid.value = timesValidFunctions.notInDisabledTimes(newTimes);
+    isBeforeCutoffTimeValid.value = timesValidFunctions.withinCutoffTime(newTimes);
     emit('timeValid');
   },
   { immediate: true }
