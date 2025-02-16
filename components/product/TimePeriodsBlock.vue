@@ -38,12 +38,13 @@ const timesValidFunctions = {
   }
 };
 watch(
-  () => keepTimes.value,
-  (newTimes) => {
-    isTimePeriodValid.value = timesValidFunctions.notInDisabledTimes(newTimes);
-    isBeforeCutoffTimeValid.value = timesValidFunctions.withinCutoffTime(newTimes);
+  () => [keepTimes.value, serviceTime],
+  () => {
+    isTimePeriodValid.value = timesValidFunctions.notInDisabledTimes(keepTimes.value);
+    isBeforeCutoffTimeValid.value = timesValidFunctions.withinCutoffTime(keepTimes.value);
     emit('timeValid');
-  }
+  },
+  { immediate: true }
 );
 </script>
 
@@ -83,6 +84,13 @@ watch(
 
   .check-box {
     width: calc((100% / 6) - 25px);
+    min-width: 75px;
+    @include set-rwd(md) {
+      width: calc(20% - 10px);
+    }
+    @include set-rwd(xs) {
+      width: calc((100% / 3) - 10px);
+    }
   }
 }
 </style>

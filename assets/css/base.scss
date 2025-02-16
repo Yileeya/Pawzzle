@@ -202,4 +202,13 @@ body {
   .q-ripple {
     display: none !important;
   }
+
+  @include set-rwd(sm) {
+    min-width: 100px;
+  }
+  @include set-rwd(xs) {
+    .q-date__view {
+      padding: 1rem 0;
+    }
+  }
 }
