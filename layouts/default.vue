@@ -2,6 +2,8 @@
 import type { IServicesApiData } from '@/stores/services';
 import type { IPetCategory } from '@/stores/petsCategory';
 
+const loadingIndicator = useLoadingIndicator();
+
 // api fetch
 const { setServicesApiData } = useServicesStore();
 const { setPetsCategoryApiData } = usePetsCategoryStore();
@@ -45,7 +47,9 @@ const { showButton, scrollToTop } = useScrollToTop();
       <slot />
     </q-page-container>
 
-    <AppFooter />
+    <transition name="slide-left">
+      <AppFooter v-if="loadingIndicator.progress.value === 0"/>
+    </transition>
     <nuxt-icon
       name="go-to-top"
       filled
@@ -57,10 +61,14 @@ const { showButton, scrollToTop } = useScrollToTop();
 </template>
 
 <style scoped lang="scss">
-.q-page-container {
-  min-height: calc(100vh - 290px);
-  @include set-rwd(md) {
-    min-height: 100vh;
+.q-layout {
+  overflow: hidden;
+
+  .q-page-container {
+    min-height: calc(100vh - 290px);
+    @include set-rwd(md) {
+      min-height: 100vh;
+    }
   }
 }
 .scroll-to-top {
