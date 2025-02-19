@@ -64,6 +64,10 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', href: '/favicon.ico' }
       ]
+    },
+    pageTransition:{
+      name: 'slide-left',
+      mode: 'out-in'
     }
   },
   features:{ //https://github.com/nuxt/nuxt/discussions/15915#discussioncomment-9772787
