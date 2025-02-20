@@ -28,22 +28,24 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
   const petsCategoryStore = usePetsCategoryStore();
   const { selectedId: petTypeId } = toRefs(petsCategoryStore);
 
-  const { errors, defineField, validateField, handleSubmit } = useForm({
+  const initialValues = {
+    timePeriodStart: '',
+    isTimePeriodValid: false,
+    isBeforeCutoffTimeValid: false,
+    user: {
+      name: '',
+      phone: ''
+    },
+    pet: {
+      type: petTypeId.value,
+      name: ''
+    },
+    bathId: null as number | null
+  };
+
+  const { values, errors, defineField, validateField, handleSubmit, resetForm } = useForm({
     validationSchema: schema,
-    initialValues: {
-      timePeriodStart: '',
-      isTimePeriodValid: false,
-      isBeforeCutoffTimeValid: false,
-      user: {
-        name: '',
-        phone: ''
-      },
-      pet: {
-        type: petTypeId.value,
-        name: ''
-      },
-      bathId: null as number | null, 
-    }
+    initialValues: initialValues
   });
 
   // 日期與時段
@@ -75,6 +77,10 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     await validateField('isBeforeCutoffTimeValid');
   }
 
+  async function clearAllErrorMsg() {
+    resetForm({ values: values });
+  }
+
   const submit = handleSubmit((values) => {
     // send values to API
     console.log('Submit', JSON.stringify(values, null, 2));
@@ -94,6 +100,7 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     bathId,
     errors,
     validateTimes,
+    clearAllErrorMsg,
     submit
   };
 });
