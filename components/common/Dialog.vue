@@ -1,0 +1,200 @@
+<script setup lang="ts">
+// https://quasar.dev/quasar-plugins/dialog#triggering-the-custom-component
+import { useDialogPluginComponent } from 'quasar';
+
+defineProps<{
+  mode: 'success' | 'error' | 'login';
+  content?: string[];
+}>();
+defineEmits([...useDialogPluginComponent.emits]);
+
+const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent();
+</script>
+
+<template>
+  <q-dialog
+    ref="dialogRef"
+    backdrop-filter="blur(4px)"
+    class="confirm-dialog"
+    @hide="onDialogHide"
+  >
+    <Suspense>
+      <div class="dialog-container" :class="[mode]">
+        <nuxt-icon
+          class="close-icon"
+          name="plus"
+          filled
+          @click="onDialogCancel"
+        />
+        <div class="container">
+          <nuxt-icon name="confirm-dialog-bg" class="dialog-bg" filled />
+          <div class="content">
+            <nuxt-icon name="logo" class="logo" filled />
+            <div v-if="mode === 'login'" class="login-message">
+              預約請先
+              <q-btn class="btn-login" unelevated @click="onDialogOK">登入/註冊</q-btn>
+            </div>
+            <div v-else-if="mode === 'success'" class="title">
+              {{ content?.[0] }}
+              <nuxt-icon name="circle-check" filled />
+            </div>
+            <div v-else>
+              <div class="title">
+                <nuxt-icon name="triangle-exclamation" filled />錯誤！
+              </div>
+              <ul :class="{ 'string-style': content?.length === 1 }">
+                <li v-for="msg in content" :key="`dialog_${msg}`">
+                  {{ msg }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Suspense>
+  </q-dialog>
+</template>
+
+<style lang="scss">
+.confirm-dialog {
+  .q-dialog__backdrop {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .dialog-container {
+    color: var(--secondary-color);
+    fill: var(--secondary-color);
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1);
+    position: relative;
+    min-height: 275px;
+    display: flex;
+
+    &.login {
+      background-color: white;
+      .dialog-bg {
+        color: var(--primary-hover-color);
+      }
+      .login-message {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        .btn-login {
+          background-color: var(--secondary-color);
+          color: white;
+          font-size: 1.125rem;
+          border-radius: 10px;
+          padding: 0 1rem;
+          min-height: 35px;
+          letter-spacing: 1px;
+          font-weight: 400;
+        }
+      }
+    }
+    &.success {
+      background-color: var(--primary-hover-color);
+      .dialog-bg {
+        color: var(--primary-dark-hover-color);
+      }
+      .title {
+        color: var(--primary-dark-color);
+        fill: var(--primary-dark-color);
+        .nuxt-icon {
+          font-size: 2rem;
+        }
+      }
+    }
+    &.error {
+      background-color: #f9f2f2;
+      .dialog-bg {
+        color: #fce7e7;
+      }
+      .title {
+        color: #e58f8d;
+        fill: #e58f8d;
+        .nuxt-icon {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
+    .container {
+      flex: 1;
+      position: relative;
+      z-index: 2;
+      .dialog-bg {
+        z-index: -1;
+        position: absolute;
+        width: 100%;
+        svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .content {
+        padding: 30px 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.125rem;
+        letter-spacing: 2px;
+        gap: 15px;
+        .logo svg {
+          width: 100%;
+          height: 40px;
+        }
+        .title {
+          font-size: 1.5rem;
+          text-align: center;
+          display: flex;
+          align-items: baseline;
+          justify-content: center;
+          gap: 10px;
+          margin: 0 0 10px;
+        }
+        ul {
+          margin: 0;
+          &.string-style {
+            list-style-type: none;
+            padding: 0;
+          }
+        }
+      }
+    }
+
+    .close-icon {
+      position: absolute;
+      font-size: 1.5rem;
+      right: 10px;
+      top: 5px;
+      transform: rotate(45deg);
+      fill: var(--secondary-color);
+      z-index: 10;
+      transition: transform 0.5s ease;
+      &:hover {
+        cursor: pointer;
+        transform: rotate(225deg);
+      }
+    }
+  }
+  @include set-rwd(xs) {
+    .dialog-container {
+      min-height: 200px;
+      &.login {
+        background-color: var(--primary-hover-color);
+      }
+      .container {
+        .dialog-bg {
+          display: none;
+        }
+        .content .logo {
+          width: 75%;
+        }
+      }
+    }
+  }
+}
+</style>
