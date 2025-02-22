@@ -180,5 +180,21 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
       }
     }
   }
+  @include set-rwd(xs) {
+    .dialog-container {
+      min-height: 200px;
+      &.login {
+        background-color: var(--primary-hover-color);
+      }
+      .container {
+        .dialog-bg {
+          display: none;
+        }
+        .content .logo {
+          width: 75%;
+        }
+      }
+    }
+  }
 }
 </style>
