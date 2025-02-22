@@ -54,6 +54,7 @@ function handleBathProductClick(bathItem: IBathProduct) {
 onMounted(() => {
   if (!pageService.value.id) navigateTo('/product/1', { replace: true });
   clearAllErrorMsg();
+  validateTimes();
 });
 </script>
 
