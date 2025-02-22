@@ -66,6 +66,12 @@ onMounted(() => {
       :bath-products="bathProducts"
     />
     <section class="reserve-form-section">
+      <nuxt-icon
+        :name="pageService.name"
+        class="bg-icon no-slide"
+        :class="{ large: pageService.name === 'both' }"
+        filled
+      />
       <div class="left">
         <ProductBasicForm />
         <div class="form-group">
@@ -173,6 +179,7 @@ onMounted(() => {
     grid-template-columns: 1fr 1fr;
     row-gap: 10px;
     column-gap: 40px;
+    position: relative;
     .footer {
       grid-column: span 2;
       display: flex;
@@ -277,6 +284,23 @@ onMounted(() => {
         }
       }
     }
+    .bg-icon {
+      position: absolute;
+      fill: var(--primary-hover-color);
+      left: calc(250px + 50vw);
+      top: -50%;
+      z-index: -1;
+      svg {
+        height: 100%;
+        width: 500px;
+      }
+      &.large {
+        left: 50vw;
+        svg {
+          width: 800px;
+        }
+      }
+    }
   }
   @include set-rwd(md) {
     .reserve-form-section {
@@ -292,12 +316,15 @@ onMounted(() => {
         order: 3;
         flex-wrap: wrap;
       }
+      .bg-icon {
+        display: none;
+      }
     }
   }
   @include set-rwd(xs) {
     .reserve-form-section {
       padding: 15px 10px;
-      .detail{
+      .detail {
         display: none;
       }
       .input-group {
