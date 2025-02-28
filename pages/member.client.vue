@@ -38,6 +38,7 @@ definePageMeta({
   .title-block {
     display: flex;
     align-items: flex-end;
+    flex-wrap: wrap;
     gap: 10px 30px;
     .page-title {
       font-size: 1.875rem;
@@ -90,6 +91,15 @@ definePageMeta({
           fill: white;
         }
       }
+    }
+  }
+
+  @include set-rwd(md){
+    .menu-block{
+      flex-wrap: wrap;
+      flex-direction: row;
+      row-gap: 10px;
+      padding: 15px 0;
     }
   }
 }

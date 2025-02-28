@@ -228,4 +228,14 @@ body {
       padding: 0 15px;
     }
   }
+  @include set-rwd(md) {
+    .tr {
+      &.head {
+        display: none;
+      }
+      > div[data-title]:not([data-title=""])::before {
+        content: attr(data-title) "："; /* 讀取 data-title 屬性的值 */
+      }
+    }
+  }
 }

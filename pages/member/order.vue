@@ -93,6 +93,7 @@ const current = ref(3);
               <div
                 v-for="tdCol in colspans"
                 :key="`tr_${item.id}_td_${tdCol.key}`"
+                :data-title="tdCol.title"
               >
                 <div v-if="tdCol.key === 'dateAndTimes'">
                   {{ showRowDateAndTimes(item) }}
@@ -223,6 +224,52 @@ const current = ref(3);
         &:before {
           box-shadow: none;
         }
+      }
+    }
+  }
+
+  @include set-rwd(md) {
+    .grid-table {
+      padding: 0 15px;
+      :deep(.tr-item) {
+        .expansion-header.q-hoverable:hover > .q-focus-helper {
+          background-color: transparent;
+        }
+        .expansion-header {
+          align-items: flex-start;
+          .q-item__section--side {
+            padding-top: 15px;
+          }
+        }
+        .content {
+          padding-top: 0;
+          margin-top: -5px;
+        }
+        &.q-expansion-item--expanded {
+          hr {
+            display: none;
+          }
+        }
+        &:not(:last-child) {
+          border-bottom: 1px solid #e1e1e1;
+        }
+      }
+      .tr {
+        grid-template-columns: 1fr;
+        > div {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 5px;
+          padding: 5px 0;
+        }
+      }
+      .cancel-btn {
+        width: 100%;
+      }
+    }
+    .page-block {
+      .el-pagination{
+        justify-content: center;
       }
     }
   }
