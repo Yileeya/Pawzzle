@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { orderData } from "@/demoData/order";
 import type { IService, IBathProduct } from "@/stores/services";
 import type { IPetCategory } from "@/stores/petsCategory";
 
@@ -11,13 +10,15 @@ interface OrderDataRow {
   id: number;
   date: string;
   time: string[];
-  serverId: number;
   server: IService;
-  petId: number;
   pet: IPetCategory;
   price: number;
-  bathProductId: number | null;
   bathProduct: IBathProduct | null;
+  pet_name: string;
+}
+interface OrderData {
+  feature: OrderDataRow[];
+  past: OrderDataRow[];
 }
 
 const tables = ref([
@@ -49,17 +50,30 @@ const colspans = ref([
   },
 ]);
 
-const data = ref<{
-  feature: OrderDataRow[];
-  past: OrderDataRow[];
-}>({ ...orderData });
-
 function showRowDateAndTimes(item: OrderDataRow) {
   const timeEnd = item.time[item.time.length - 1];
   return `${item.date}　${item.time[0]}-${timeEnd}`;
 }
 
-const current = ref(3);
+const currentPage = ref(1);
+
+const { data: apiData } = useApi("/orders", {
+  transform: (res: any) => {
+    return {
+      data: res.data,
+      page: res.page,
+    };
+  },
+});
+const data = computed<OrderData>(() => {
+  return apiData.value?.data || { feature: [], past: [] };
+});
+const pagination = computed<{
+  total: number;
+  current: number;
+}>(() => {
+  return apiData.value?.page || { total: 1, current: 1 };
+});
 </script>
 
 <template>
@@ -102,7 +116,12 @@ const current = ref(3);
                   {{ item.server.display_name }}
                 </div>
                 <div v-else-if="tdCol.key === 'pet'">
-                  {{ item.pet.name }}
+                  <nuxt-icon
+                    class="pet-icon"
+                    :name="item.pet.category"
+                    filled
+                  />
+                  {{ item.pet_name }}
                 </div>
                 <div v-else-if="tdCol.key === 'price'">
                   {{ foramtCurrency(item.price) }}
@@ -121,7 +140,7 @@ const current = ref(3);
           <div class="content">
             <div class="remark-row">
               訂單備註：
-              <span v-if="item.bathProductId">
+              <span v-if="item.bathProduct">
                 加購 {{ item.bathProduct?.name }}+{{ item.bathProduct?.price }}
               </span>
               <span v-else>無</span>
@@ -138,8 +157,8 @@ const current = ref(3);
 
       <div v-if="table.key === 'past'" class="page-block">
         <q-pagination
-          v-model="current"
-          :max="10"
+          v-model="currentPage"
+          :max="pagination.total"
           :max-pages="6"
           :ripple="false"
           flat
@@ -197,6 +216,11 @@ const current = ref(3);
       }
       &.no-data {
         grid-template-columns: 1fr;
+      }
+      .pet-icon {
+        font-size: 1.25rem;
+        fill: var(--secondary-color);
+        margin-right: 5px;
       }
     }
     .cancel-btn {
@@ -268,7 +292,7 @@ const current = ref(3);
       }
     }
     .page-block {
-      .el-pagination{
+      .el-pagination {
         justify-content: center;
       }
     }
