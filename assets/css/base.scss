@@ -213,3 +213,19 @@ body {
     }
   }
 }
+
+.grid-table {
+  border: 1px solid var(--primary-light-hover-color);
+  border-radius: 10px;
+  padding: 0 30px;
+  .tr {
+    display: grid;
+    padding: 10px 0;
+    &.head {
+      border-bottom: 1px solid var(--primary-light-hover-color);
+    }
+    > div {
+      padding: 0 15px;
+    }
+  }
+}
