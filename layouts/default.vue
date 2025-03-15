@@ -7,6 +7,7 @@ const loadingIndicator = useLoadingIndicator();
 // api fetch
 const { setServicesApiData } = useServicesStore();
 const { setPetsCategoryApiData } = usePetsCategoryStore();
+const { getUser } = useUserStore();
 
 const { $api } = useNuxtApp();
 
@@ -32,6 +33,7 @@ await useAsyncData('servicesAndPetsCategory', async () => {
     petsCategory: normalizedPetsCategory
   };
 });
+await getUser();
 
 // scroll to top
 const { showButton, scrollToTop } = useScrollToTop();
@@ -65,7 +67,7 @@ const { showButton, scrollToTop } = useScrollToTop();
   overflow: hidden;
 
   .q-page-container {
-    min-height: calc(100vh - 290px);
+    min-height: 100vh;
     @include set-rwd(md) {
       min-height: 100vh;
     }

@@ -5,6 +5,11 @@ function routerTo(route: string = '', isScroll = false) {
   navigateTo(`/${route}`);
   if (isScroll) scrollToElement();
 }
+
+const userStore = useUserStore();
+const { logout } = userStore;
+const { userInfo } = storeToRefs(userStore);
+const showLoginModal = ref(false);
 </script>
 
 <template>
@@ -15,7 +20,16 @@ function routerTo(route: string = '', isScroll = false) {
           <nuxt-icon name="logo" filled class="logo" @click="routerTo('')" />
           <a class="router-link" @click="routerTo('', true)">美容服務</a>
         </div>
-        <q-btn-dropdown flat class="user-dropdown-btn">
+        <q-btn
+          v-if="userInfo.id === 0"
+          class="login-btn"
+          flat
+          unelevated
+          :ripple="false"
+          label="登入"
+          @click="showLoginModal = true"
+        />
+        <q-btn-dropdown v-else flat class="user-dropdown-btn">
           <template #label>
             <q-avatar size="xl">
               <img src="/images/user-avatar.png" alt="user-avatar" >
@@ -29,7 +43,7 @@ function routerTo(route: string = '', isScroll = false) {
               </q-item-section>
             </q-item>
             <q-separator />
-            <q-item v-close-popup clickable>
+            <q-item v-close-popup clickable @click="logout()">
               <q-item-section>
                 <nuxt-icon name="arrow-right-from-bracket" filled />
                 登出
@@ -40,6 +54,7 @@ function routerTo(route: string = '', isScroll = false) {
       </q-toolbar-title>
     </q-toolbar>
   </q-header>
+  <user-login-modal v-model="showLoginModal" />
 </template>
 
 <style lang="scss">
@@ -77,6 +92,15 @@ function routerTo(route: string = '', isScroll = false) {
       }
       .user-dropdown-btn {
         border-radius: 10px;
+      }
+      .login-btn {
+        background: var(--primary-light-hover-color);
+        color: var(--secondary-color);
+        font-size: 1.125rem;
+        border-radius: 10px;
+        letter-spacing: 2px;
+        line-height: 1;
+        width: 100px;
       }
     }
     @media (min-width: 1439px) {
