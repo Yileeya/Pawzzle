@@ -18,7 +18,8 @@ export default defineNuxtConfig({
   quasar: {
     plugins: [
       'Dialog',
-      'Loading'
+      'Loading',
+      'Notify'
     ],
     config: {
       dark: false,
@@ -26,6 +27,11 @@ export default defineNuxtConfig({
         primary: '#f9d673',
         secondary: '#998e86',
         negative: '#8B0000'
+      },
+      notify: {
+        position: 'top',
+        type: 'positive',
+        timeout: 1000
       }
     }
   },
