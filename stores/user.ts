@@ -30,10 +30,13 @@ export interface IPet {
   gender: string;
   birth_date: string;
   weight: string;
+  is_default: 1 | 0;
 }
 
 export const useUserStore = defineStore('user', () => {
   const { $api } = useNuxtApp();
+
+  const { setSelectedPetById } = usePetsCategoryStore();
 
   const userInit = {
     id: 0,
@@ -74,6 +77,9 @@ export const useUserStore = defineStore('user', () => {
 
     await $api<IUser>('/user').then((response) => {
       user.value = response;
+      if(response.pets?.length){
+        setSelectedPetById(userDefaultPet.value.pet_type_id);
+      }
     });
   }
 
@@ -100,11 +106,25 @@ export const useUserStore = defineStore('user', () => {
     return info;
   });
 
+  const userDefaultPet = computed(() => {
+    const petInit = {
+      id: 0,
+      pet_type_id: 0,
+      name: '',
+      gender: '',
+      birth_date: '',
+      weight: 0,
+      is_default: 0
+    };
+    return user.value.pets?.find((pet) => pet.is_default === 1) || petInit;
+  });
+
   return {
     login,
     getUser,
     logout,
     user,
-    userInfo
+    userInfo,
+    userDefaultPet
   };
 });

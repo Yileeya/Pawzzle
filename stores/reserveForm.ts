@@ -33,17 +33,21 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
   const petsCategoryStore = usePetsCategoryStore();
   const { selectedId: petTypeId } = toRefs(petsCategoryStore);
 
+  // userStore
+  const userStore = useUserStore();
+  const { user, userDefaultPet } = toRefs(userStore);
+
   const initialValues = {
     timePeriodStart: '',
     isTimePeriodValid: false,
     isBeforeCutoffTimeValid: false,
     user: {
-      name: '',
-      phone: ''
+      name: user.value.name,
+      phone: user.value.phone
     },
     pet: {
       type: petTypeId.value,
-      name: ''
+      name: userDefaultPet.value.id ? userDefaultPet.value.name : ''
     },
     bathId: null as number | null
   };
@@ -78,7 +82,7 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
   );
 
   // 選擇的時段
-  function setSelectedTimePeriod(data: iTimeSlot[]){
+  function setSelectedTimePeriod(data: iTimeSlot[]) {
     selectedTimePeriod.value = [...data];
   }
 
@@ -113,7 +117,6 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     validateTimes,
     clearAllErrorMsg,
     submit,
-    setSelectedTimePeriod,
-    selectedTimePeriod
+    setSelectedTimePeriod
   };
 });

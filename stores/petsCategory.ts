@@ -22,11 +22,17 @@ export const usePetsCategoryStore = defineStore('petsCategory', () => {
     selectedPet.value = data;
   }
 
+  function setSelectedPetById(id: number) {
+    const data = pets.value.find((pet) => pet.id === id) || null;
+    setSelectedPet(data);
+  }
+
   return {
     pets,
     selectedId,
     selectedPet,
     setPetsCategoryApiData,
-    setSelectedPet
+    setSelectedPet,
+    setSelectedPetById
   };
 });

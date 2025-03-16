@@ -20,6 +20,7 @@ const { name, nameAttrs, phone, phoneAttrs, petName, petNameAttrs, errors } = st
         dense
         rounded
         placeholder="姓名"
+        readonly
       />
     </div>
     <div class="input-group">
@@ -35,11 +36,12 @@ const { name, nameAttrs, phone, phoneAttrs, petName, petNameAttrs, errors } = st
         rounded
         type="number"
         placeholder="聯絡電話"
+        readonly
       />
     </div>
     <div class="input-group">
       <label>寶貝資訊</label>
-      <CommonPetCategorySelect hide-bottom-space :error="!!errors['pet.type']" />
+      <CommonPetCategorySelect readonly hide-bottom-space :error="!!errors['pet.type']" />
       <q-input
         v-model="petName"
         v-bind="petNameAttrs"
@@ -49,6 +51,7 @@ const { name, nameAttrs, phone, phoneAttrs, petName, petNameAttrs, errors } = st
         dense
         rounded
         placeholder="寶貝名字"
+        readonly
       />
     </div>
   </section>
