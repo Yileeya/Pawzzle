@@ -31,8 +31,20 @@ export default defineNuxtPlugin(() => {
       let message: string[] = ['出現未知錯誤，請聯繫管理員。'];
 
       status = data.status !== 'fail';
-      if (data.message)
-        message = Array.isArray(data.message) ? data.message : [data.message];
+
+      if (data.message) {
+        if (Array.isArray(data.message)) {
+          // 合併正常的 string[]
+          message = data.message; 
+        } else if (typeof data.message === 'object') {
+          // 如果是錯誤物件，提取錯誤訊息
+          const errorMessages = Object.values(data.message).flat() as string[];
+          message = [...errorMessages]; // 合併錯誤訊息
+        } else {
+          // 如果是單一的錯誤訊息
+          message = [data.message];
+        }
+      }
 
       Dialog.create({
         component: DialogComponent,
