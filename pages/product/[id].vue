@@ -123,11 +123,12 @@ onMounted(() => {
           <nuxt-icon name="clock" class="clock-icon" filled /> 預約日期與時段
         </h6>
         <CommonCalendar v-model="selectedDate" />
-        <ProductTimePeriodsBlock
+        <ProductTimePeriodsBlock 
           v-model:time-period-start="timePeriodStart"
           v-model:is-time-period-valid="isTimePeriodValid"
           v-model:is-before-cutoff-time-valid="isBeforeCutoffTimeValid"
           :service-time="pageService.time"
+          :selected-date="selectedDate"
           @time-valid="validateTimes"
         />
       </div>

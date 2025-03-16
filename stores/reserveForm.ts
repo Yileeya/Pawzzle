@@ -2,6 +2,11 @@ import { useForm } from 'vee-validate';
 import * as Yup from 'yup';
 import { usePetsCategoryStore } from '@/stores/petsCategory';
 
+interface iTimeSlot {
+  key: string;
+  value: string;
+}
+
 const schema = Yup.object({
   timePeriodStart: Yup.string().required('請選擇時段。'),
   isTimePeriodValid: Yup.boolean()
@@ -50,6 +55,7 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
 
   // 日期與時段
   const selectedDate = ref<string>(formatDate(new Date()));
+  const selectedTimePeriod = ref<iTimeSlot[]>([]);
   const [timePeriodStart] = defineField('timePeriodStart');
   const [isTimePeriodValid] = defineField('isTimePeriodValid');
   const [isBeforeCutoffTimeValid] = defineField('isBeforeCutoffTimeValid');
@@ -70,6 +76,11 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
       petType.value = newVal;
     }
   );
+
+  // 選擇的時段
+  function setSelectedTimePeriod(data: iTimeSlot[]){
+    selectedTimePeriod.value = [...data];
+  }
 
   // 立即驗證時段
   async function validateTimes() {
@@ -101,6 +112,8 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     errors,
     validateTimes,
     clearAllErrorMsg,
-    submit
+    submit,
+    setSelectedTimePeriod,
+    selectedTimePeriod
   };
 });

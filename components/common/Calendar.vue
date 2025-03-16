@@ -31,6 +31,7 @@ async function navigation(yearAndMonth: { year: number; month: number }) {
     class="calendar-inline"
     text-color="active"
     color="active"
+    no-unset
     :locale="myLocale"
     :options="disabledBeforeToday"
     :navigation-min-year-month="formatDate(new Date(), 'YYYY/MM')"

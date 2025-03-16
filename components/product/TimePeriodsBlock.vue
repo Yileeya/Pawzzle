@@ -1,20 +1,57 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 
-const { serviceTime = 30 } = defineProps<{
+const props = defineProps<{
   serviceTime: number;
+  selectedDate: string;
 }>();
+
 const emit = defineEmits(['timeValid']);
 const timePeriodStart = defineModel('timePeriodStart', { type: String });
 const isTimePeriodValid = defineModel('isTimePeriodValid', { type: Boolean });
 const isBeforeCutoffTimeValid = defineModel('isBeforeCutoffTimeValid', { type: Boolean });
 
+// 整日時段
 const timeSlots = generateTimeSlots('9:00', '17:30', 30);
-const disabledTimes = ref<string[]>(['12:00', '12:30']);
+
+// 取得日期可使用的時間，偵測selectedDate
+const { data: dailyTimeSlotsData } = useApi(
+  () => `/dailyTimeSlots?user_id=3&date=${props.selectedDate}`,
+  {
+    transform: (dailyTimeSlotsData: Record<string, any>) => {
+      const dateKey = Object.keys(dailyTimeSlotsData)[0];
+      const entries = Object.entries(dailyTimeSlotsData[dateKey]);
+      return entries.map(([key, value]) => ({
+        key,
+        value: (value as string).slice(0, -3) // Remove the last 3 characters ":00"
+      }));
+    }
+  }
+);
+
+// 禁止時段
+const disabledTimes = computed<string[]>(() => {
+  const isSelectedToday = props.selectedDate === formatDate(new Date());
+  const currentTime = new Date().getHours() * 60 + new Date().getMinutes(); // 轉換為分鐘
+
+  return timeSlots.filter((time) => {
+    const isBooked = !dailyTimeSlotsData.value?.some((item) => item.value === time);
+    if (isBooked) return true; // 不可用時段
+
+    if(isSelectedToday){ // 選到今天
+      // 轉換 timeSlots 為分鐘（例如 "09:00" => 540）
+      const [hours, minutes] = time.split(':').map(Number);
+      const timeInMinutes = hours * 60 + minutes;
+      return timeInMinutes <= currentTime; // 禁用當前時間之前的時段
+    }
+
+    return false;
+  });
+});
 
 // 耗時計算
 const keepTimes = computed(() => {
-  const timePeriodEnd = calculateEndTime(timePeriodStart.value as string, serviceTime);
+  const timePeriodEnd = calculateEndTime(timePeriodStart.value as string, props.serviceTime);
   const keepTimePeriods = generateTimeSlots(
     timePeriodStart.value,
     timePeriodEnd,
@@ -28,7 +65,9 @@ const keepTimes = computed(() => {
 const timesValidFunctions = {
   // 檢查時間是否不在 disabledTimes 內
   notInDisabledTimes: (times: string[]): boolean => {
-    return times.every((time) => !disabledTimes.value.includes(time));
+    return times.every(
+      (time) => !disabledTimes.value.some((item) => item === time)
+    );
   },
   // 檢查時間是否小於 打烊時間
   withinCutoffTime: (times: string[], cutoffTime = '18:00'): boolean => {
@@ -37,14 +76,22 @@ const timesValidFunctions = {
     );
   }
 };
-watch(
-  () => keepTimes.value,
-  (newTimes) => {
-    isTimePeriodValid.value = timesValidFunctions.notInDisabledTimes(newTimes);
-    isBeforeCutoffTimeValid.value = timesValidFunctions.withinCutoffTime(newTimes);
-    emit('timeValid');
-  },
-  { immediate: true }
+
+// 驗證規則: 選擇時段、日期變換(disabledTimes)時
+const { setSelectedTimePeriod } = useReserveFormStore();
+
+watch([() => keepTimes.value, () => disabledTimes.value.length],
+    ([newKeepTimes]) => {
+        isTimePeriodValid.value = timesValidFunctions.notInDisabledTimes(newKeepTimes);
+        isBeforeCutoffTimeValid.value = timesValidFunctions.withinCutoffTime(newKeepTimes);
+
+        // api的時段 + key, 存進store
+        const selectedTimePeriod = dailyTimeSlotsData.value?.filter((item) => newKeepTimes.includes(item.value)) || [];
+        setSelectedTimePeriod(selectedTimePeriod);
+
+        emit('timeValid');
+    },
+    {immediate: true}
 );
 </script>
 
