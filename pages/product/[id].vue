@@ -26,7 +26,7 @@ const {
   bathId,
   errors
 } = storeToRefs(reserveStore);
-const { validateTimes, clearAllErrorMsg, validate, submit } = reserveStore;
+const { validateTimes, clearAllErrorMsg, validate, submit, setSelectedTimePeriod } = reserveStore;
 
 // 預約日期時段顯示
 const dateAndTimes = computed(() => {
@@ -76,6 +76,8 @@ async function clickSubmit() {
         content: result.message
       }
     }).onDismiss(() => {
+      timePeriodStart.value = '';
+      setSelectedTimePeriod([]);
       navigateTo('/');
     });
   }
@@ -182,7 +184,7 @@ onMounted(() => {
             </span>
           </div>
         </div>
-        <q-btn unelevated class="submit-btn" @click.prevent="clickSubmit">
+        <q-btn unelevated class="submit-btn" :disable="sending" @click.prevent="clickSubmit">
           送出訂單
         </q-btn>
       </div>
