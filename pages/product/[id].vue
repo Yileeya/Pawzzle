@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Dialog from '@/components/common/Dialog.vue';
 import type { IBathProduct } from '@/stores/services';
 
 useSeoMeta({
@@ -25,7 +26,7 @@ const {
   bathId,
   errors
 } = storeToRefs(reserveStore);
-const { validateTimes, clearAllErrorMsg, submit } = reserveStore;
+const { validateTimes, clearAllErrorMsg, validate, submit } = reserveStore;
 
 // 預約日期時段顯示
 const dateAndTimes = computed(() => {
@@ -48,6 +49,37 @@ function handleBathProductClick(bathItem: IBathProduct) {
     selectedBathProduct.value = bathItem;
   }
   bathId.value = selectedBathProduct.value?.id ?? null;
+}
+
+// 價格計算
+function priceCalculation(type: 'default' | 'total'): number {
+  const defaultPrice = pageService.value.price + (selectedPet.value?.extra_price[pageService.value.id] || 0);
+
+  if (type === 'total') return defaultPrice + (selectedBathProduct.value?.price || 0);
+  else return defaultPrice;
+}
+
+// 送出按鈕
+const $q = useQuasar();
+const sending = ref(false);
+async function clickSubmit() {
+  const { valid } = await validate();
+  if (!valid) return;
+
+  sending.value = true;
+  const result = await submit(pageService.value.id, priceCalculation('total'));
+  if (result.type === 'success') {
+    $q.dialog({
+      component: Dialog,
+      componentProps: {
+        mode: 'success',
+        content: result.message
+      }
+    }).onDismiss(() => {
+      navigateTo('/');
+    });
+  }
+  sending.value = false;
 }
 
 // 若輸入錯誤id，則導向id=1
@@ -123,7 +155,7 @@ onMounted(() => {
           <nuxt-icon name="clock" class="clock-icon" filled /> 預約日期與時段
         </h6>
         <CommonCalendar v-model="selectedDate" />
-        <ProductTimePeriodsBlock 
+        <ProductTimePeriodsBlock
           v-model:time-period-start="timePeriodStart"
           v-model:is-time-period-valid="isTimePeriodValid"
           v-model:is-before-cutoff-time-valid="isBeforeCutoffTimeValid"
@@ -136,12 +168,7 @@ onMounted(() => {
         <div class="price-block">
           <div class="detail">
             <span class="h4 number-text">
-              {{
-                foramtCurrency(
-                  pageService.price +
-                    (selectedPet?.extra_price[pageService.id] || 0)
-                )
-              }}
+              {{ foramtCurrency(priceCalculation("default")) }}
             </span>
             <span v-show="selectedBathProduct?.price" class="h6 number-text">
               +{{ selectedBathProduct?.price }}
@@ -151,17 +178,13 @@ onMounted(() => {
             總計
             <span class="h4 number-text">
               NT
-              {{
-                foramtCurrency(
-                  pageService.price +
-                    (selectedPet?.extra_price[pageService.id] || 0) +
-                    (selectedBathProduct?.price || 0)
-                )
-              }}
+              {{ foramtCurrency(priceCalculation("total")) }}
             </span>
           </div>
         </div>
-        <q-btn unelevated class="submit-btn" @click="submit"> 送出訂單 </q-btn>
+        <q-btn unelevated class="submit-btn" @click.prevent="clickSubmit">
+          送出訂單
+        </q-btn>
       </div>
     </section>
   </div>

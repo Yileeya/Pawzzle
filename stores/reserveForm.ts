@@ -1,10 +1,16 @@
 import { useForm } from 'vee-validate';
 import * as Yup from 'yup';
 import { usePetsCategoryStore } from '@/stores/petsCategory';
+import { useUserStore } from '@/stores/user';
 
 interface iTimeSlot {
   key: string;
   value: string;
+}
+
+interface iReserveApiResult {
+  type: 'error' | 'success';
+  message: string[];
 }
 
 const schema = Yup.object({
@@ -17,9 +23,9 @@ const schema = Yup.object({
     .required(),
   user: Yup.object({
     name: Yup.string().required('請輸入姓名。'),
-    phone: Yup.string()
-      .required('手機號碼須以09開頭，且為10位數字。')
-      .matches(/^09\d{8}$/, '手機號碼須以09開頭，且為10位數字。')
+    phone: Yup.string().nullable().notRequired()
+    // .required('手機號碼須以09開頭，且為10位數字。')
+    // .matches(/^09\d{8}$/, '手機號碼須以09開頭，且為10位數字。')
   }),
   pet: Yup.object({
     type: Yup.number().required('請選擇寵物類別。'),
@@ -29,6 +35,8 @@ const schema = Yup.object({
 });
 
 export const useReserveFormStore = defineStore('reserveForm', () => {
+  const { $api } = useNuxtApp();
+
   // petsCategoryStore
   const petsCategoryStore = usePetsCategoryStore();
   const { selectedId: petTypeId } = toRefs(petsCategoryStore);
@@ -52,10 +60,11 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     bathId: null as number | null
   };
 
-  const { values, errors, defineField, validateField, handleSubmit, resetForm } = useForm({
-    validationSchema: schema,
-    initialValues: initialValues
-  });
+  const { values, errors, defineField, validateField, resetForm, validate } =
+    useForm({
+      validationSchema: schema,
+      initialValues: initialValues
+    });
 
   // 日期與時段
   const selectedDate = ref<string>(formatDate(new Date()));
@@ -96,10 +105,37 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     resetForm({ values: values });
   }
 
-  const submit = handleSubmit((values) => {
-    // send values to API
-    console.log('Submit', JSON.stringify(values, null, 2));
-  });
+  async function submit(
+    serviceId: number,
+    price: number
+  ): Promise<iReserveApiResult> {
+    const form = {
+      pet_id: userDefaultPet.value.id,
+      service_id: serviceId,
+      bath_product_id: bathId.value,
+      price: price,
+      pet_appointment_details: selectedTimePeriod.value.map((time) => time.key)
+    };
+
+    const result: iReserveApiResult = {
+      type: 'error',
+      message: []
+    };
+
+    await $api('/appointments', {
+      method: 'POST',
+      body: form
+    })
+      .then(() => {
+        result.type = 'success';
+        result.message = ['新增成功！'];
+      })
+      .catch((err) => {
+        result.type = 'error';
+        result.message = err.message;
+      });
+    return result;
+  }
 
   return {
     selectedDate,
@@ -116,6 +152,7 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     errors,
     validateTimes,
     clearAllErrorMsg,
+    validate,
     submit,
     setSelectedTimePeriod
   };

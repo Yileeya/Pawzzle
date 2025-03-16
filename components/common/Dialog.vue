@@ -157,6 +157,7 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
         }
         ul {
           margin: 0;
+          padding: 0;
           &.string-style {
             list-style-type: none;
             padding: 0;
