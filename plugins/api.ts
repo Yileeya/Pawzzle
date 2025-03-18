@@ -62,6 +62,10 @@ export default defineNuxtPlugin(() => {
           mode: 'error',
           content: message
         }
+      }).onDismiss(() => {
+        if (response.status === 401) {
+          navigateTo('/');
+        }
       });
 
       throw { status, message } as ApiErrorResponse;
