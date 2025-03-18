@@ -8,7 +8,7 @@ interface ApiErrorResponse {
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
-  
+
   const api = $fetch.create({
     baseURL: config.public.apiUrl as string,
     onRequest({ request, options, error }) {
@@ -24,8 +24,8 @@ export default defineNuxtPlugin(() => {
       }
       return response._data;
     },
-    async onResponseError(response) {
-      const data = response.response._data;
+    async onResponseError({ response }) {
+      const data = response._data;
 
       let status = false;
       let message: string[] = ['出現未知錯誤，請聯繫管理員。'];
@@ -35,7 +35,7 @@ export default defineNuxtPlugin(() => {
       if (data.message) {
         if (Array.isArray(data.message)) {
           // 合併正常的 string[]
-          message = data.message; 
+          message = data.message;
         } else if (typeof data.message === 'object') {
           // 如果是錯誤物件，提取錯誤訊息
           const errorMessages = Object.values(data.message).flat() as string[];
@@ -43,6 +43,16 @@ export default defineNuxtPlugin(() => {
         } else {
           // 如果是單一的錯誤訊息
           message = [data.message];
+        }
+      }
+
+      if (response.status === 401) {
+        if (import.meta.server)
+          throw createError({ statusCode: 401, statusMessage: 'Unauthorized' });
+        else {
+          const token = useCookie('token');
+          token.value = '';
+          message = ['登入逾時，請重新登入！'];
         }
       }
 
