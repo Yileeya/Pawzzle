@@ -6,9 +6,10 @@ function routerTo(route: string = '', isScroll = false) {
   if (isScroll) scrollToElement();
 }
 
+const tokenCookie = useCookie('token');
+
 const userStore = useUserStore();
 const { logout } = userStore;
-const { userInfo } = storeToRefs(userStore);
 const showLoginModal = ref(false);
 </script>
 
@@ -21,7 +22,7 @@ const showLoginModal = ref(false);
           <a class="router-link" @click="routerTo('', true)">美容服務</a>
         </div>
         <q-btn
-          v-if="userInfo.id === 0"
+          v-if="!tokenCookie"
           class="login-btn"
           flat
           unelevated

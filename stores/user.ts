@@ -51,7 +51,7 @@ export const useUserStore = defineStore('user', () => {
   async function login(form: ILogin): Promise<boolean> {
     let isSuccessful = false;
 
-    const token = useCookie('token');
+    const token = useCookie('token', { maxAge: 86400 });
 
     await $api<{ accessToken: string }>('/login', {
       method: 'POST',

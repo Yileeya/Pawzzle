@@ -33,7 +33,10 @@ await useAsyncData('servicesAndPetsCategory', async () => {
     petsCategory: normalizedPetsCategory
   };
 });
-await getUser();
+
+onMounted(async () => {
+  await getUser();
+});
 
 // scroll to top
 const { showButton, scrollToTop } = useScrollToTop();
