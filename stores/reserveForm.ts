@@ -90,6 +90,15 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     }
   );
 
+  // 監聽使用者，同步賦值
+  watch(
+    () => user.value,
+    (newVal) => {
+      name.value = newVal.name;
+      phone.value = newVal.phone;
+    }
+  );
+
   // 選擇的時段
   function setSelectedTimePeriod(data: iTimeSlot[]) {
     selectedTimePeriod.value = [...data];
