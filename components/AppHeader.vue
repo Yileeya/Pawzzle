@@ -44,6 +44,13 @@ const showLoginModal = ref(false);
               </q-item-section>
             </q-item>
             <q-separator />
+            <q-item v-close-popup clickable @click="routerTo('member/user')">
+              <q-item-section>
+                <nuxt-icon name="circle-user-solid" filled />
+                個人資料
+              </q-item-section>
+            </q-item>
+            <q-separator />
             <q-item v-close-popup clickable @click="logout()">
               <q-item-section>
                 <nuxt-icon name="arrow-right-from-bracket" filled />
