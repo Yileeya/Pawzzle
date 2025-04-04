@@ -1,10 +1,33 @@
-<script setup>
+<script setup lang="ts">
 definePageMeta({
   redirect: '/member/user'
 });
 
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
+
+// pinia list
+const { $api } = useNuxtApp();
+const { setGenderList, setOrderStatusList } = useTypeListStore();
+
+await useAsyncData('typeList', async () => {
+  const apis = [$api('/statusList'), $api('/genderList')];
+  const [statusList, genderList] = await Promise.allSettled(apis);
+
+  const normalizedStatusList =
+    statusList.status === 'fulfilled' ? (statusList.value as Record<string, string>) : {};
+
+  const normalizedGenderList =
+    genderList.status === 'fulfilled' ? (genderList.value as Record<string, string>) : {};
+
+  setGenderList(normalizedGenderList);
+  setOrderStatusList(normalizedStatusList);
+
+  return {
+    statusList: normalizedStatusList,
+    genderList: normalizedGenderList
+  };
+});
 </script>
 <template>
   <div class="member-page max-page-width">
