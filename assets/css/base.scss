@@ -242,6 +242,10 @@ body {
     &.head {
       border-bottom: 1px solid var(--primary-light-hover-color);
     }
+    &.no-data {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
     > div {
       padding: 0 15px;
     }
