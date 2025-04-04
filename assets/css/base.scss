@@ -216,3 +216,33 @@ body {
     }
   }
 }
+
+.grid-table {
+  border: 1px solid var(--primary-light-hover-color);
+  border-radius: 10px;
+  padding: 0 30px;
+  .tr {
+    display: grid;
+    padding: 10px 0;
+    &.head {
+      border-bottom: 1px solid var(--primary-light-hover-color);
+    }
+    > div {
+      padding: 0 15px;
+    }
+  }
+  @include set-rwd(md) {
+    padding: 0;
+    .tr {
+      &.head {
+        display: none;
+      }
+      > div[data-title]:not([data-title=""])::before {
+        content: attr(data-title) "："; /* 讀取 data-title 屬性的值 */
+      }
+      &:nth-child(odd) {
+        background-color: #f5f5f5;
+      }
+    }
+  }
+}
