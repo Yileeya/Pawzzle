@@ -106,6 +106,10 @@ export const useUserStore = defineStore('user', () => {
     return info;
   });
 
+  const userPets = computed(()=>{
+    return user.value.pets;
+  });
+
   const userDefaultPet = computed(() => {
     const petInit = {
       id: 0,
@@ -125,6 +129,7 @@ export const useUserStore = defineStore('user', () => {
     logout,
     user,
     userInfo,
+    userPets,
     userDefaultPet
   };
 });
