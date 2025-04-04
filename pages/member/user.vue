@@ -2,7 +2,7 @@
 import type { IPet, IUser } from '@/stores/user';
 
 useSeoMeta({
-  title: 'Pawzzle Studio 使用者資料'
+  title: 'Pawzzle Studio 個人資料'
 });
 
 // 使用者寵物
