@@ -13,8 +13,12 @@ const { userPets, userInfo } = storeToRefs(userStore);
 const petsCategoryStore = usePetsCategoryStore();
 const { pets } = storeToRefs(petsCategoryStore);
 
+// typeListStore
+const typeListStore = useTypeListStore();
+const { genderList } = storeToRefs(typeListStore);
+
 const colspans: { name: string; key: keyof IPet }[] = [
-{
+  {
     name: '預設',
     key: 'is_default'
   },
@@ -95,7 +99,7 @@ function showPetsCategoryName(petTypeId: number) {
           :data-title="tdCol.name"
         >
           <span v-if="tdCol.key === 'gender'">
-            {{ pet.gender === "male" ? "公" : "母" }}
+            {{ genderList[pet.gender] || '-'}}
           </span>
           <span v-else-if="tdCol.key === 'is_default'">
             <nuxt-icon
@@ -128,11 +132,9 @@ function showPetsCategoryName(petTypeId: number) {
   }
 
   .grid-table {
-    &.user {
-      margin-bottom: 30px;
-      .tr {
-        grid-template-columns: 150px 1fr;
-      }
+    margin-bottom: 30px;
+    &.user .tr {
+      grid-template-columns: 150px 1fr;
     }
     &.pets .tr {
       grid-template-columns: 65px 2fr repeat(4, 1fr) 100px;
