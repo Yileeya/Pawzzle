@@ -158,7 +158,8 @@ const showLoginModal = ref(false);
     opacity: 0 !important;
   }
   .q-separator {
-    margin: 3px 0;
+    margin-top: 3px;
+    margin-bottom: 3px;
   }
   .q-item__section {
     display: flex;

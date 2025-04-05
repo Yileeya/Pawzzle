@@ -243,7 +243,7 @@ body {
       border-bottom: 1px solid var(--primary-light-hover-color);
     }
     &.no-data {
-      grid-template-columns: 1fr;
+      display: block;
       text-align: center;
     }
     > div {

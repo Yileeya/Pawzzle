@@ -89,7 +89,7 @@ const { orderStatusList } = storeToRefs(typeListStore);
       :key="`order_table_${table.key}`"
       class="order-table-block"
     >
-      <div class="row-tilte">
+      <div class="row-title">
         <nuxt-icon name="puzzle-piece" filled />
         {{ table.title }}
       </div>

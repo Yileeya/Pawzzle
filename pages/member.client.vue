@@ -136,7 +136,7 @@ await useAsyncData('typeList', async () => {
 
 <style lang="scss">
 .member-page {
-  .row-tilte {
+  .row-title {
     font-size: 1.25rem;
     font-weight: 500;
     margin-bottom: 15px;
