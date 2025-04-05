@@ -43,14 +43,14 @@ const showLoginModal = ref(false);
                 預約紀錄
               </q-item-section>
             </q-item>
-            <q-separator />
+            <div class="el-separator"/>
             <q-item v-close-popup clickable @click="routerTo('member/user')">
               <q-item-section>
                 <nuxt-icon name="circle-user-solid" filled />
                 個人資料
               </q-item-section>
             </q-item>
-            <q-separator />
+            <div class="el-separator"/>
             <q-item v-close-popup clickable @click="logout()">
               <q-item-section>
                 <nuxt-icon name="arrow-right-from-bracket" filled />
@@ -157,9 +157,10 @@ const showLoginModal = ref(false);
   .q-hoverable:hover > .q-focus-helper {
     opacity: 0 !important;
   }
-  .q-separator {
-    margin-top: 3px;
-    margin-bottom: 3px;
+  .el-separator {
+    margin: 3px 0;
+    height: 1px;
+    background: #0000001f;
   }
   .q-item__section {
     display: flex;

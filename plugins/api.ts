@@ -52,7 +52,7 @@ export default defineNuxtPlugin(() => {
         else {
           const token = useCookie('token');
           token.value = '';
-          message = ['登入逾時，請重新登入！'];
+          if (message.includes('Unauthorized')) message = ['登入逾時，請重新登入！'];
         }
       }
 
