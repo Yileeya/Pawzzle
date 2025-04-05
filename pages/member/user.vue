@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IPet, IUser } from '@/stores/user';
+import type { IPet } from '@/stores/user';
 
 useSeoMeta({
   title: 'Pawzzle Studio 個人資料'
@@ -7,7 +7,7 @@ useSeoMeta({
 
 // 使用者寵物
 const userStore = useUserStore();
-const { userPets, userInfo } = storeToRefs(userStore);
+const { userPets } = storeToRefs(userStore);
 
 // 寵物類別
 const petsCategoryStore = usePetsCategoryStore();
@@ -43,20 +43,6 @@ const colspans: { name: string; key: keyof IPet }[] = [
     key: 'weight'
   }
 ];
-const userColspans: { name: string; key: keyof IUser }[] = [
-  {
-    name: '姓名',
-    key: 'name'
-  },
-  {
-    name: '信箱',
-    key: 'email'
-  },
-  {
-    name: '聯絡電話',
-    key: 'phone'
-  }
-];
 
 function showPetsCategoryName(petTypeId: number) {
   return pets.value.find((pet) => pet.id === petTypeId)?.name || '';
@@ -65,20 +51,9 @@ function showPetsCategoryName(petTypeId: number) {
 
 <template>
   <div class="user-page">
-    <div class="row-tilte">
-      <div>
-        <nuxt-icon name="circle-user-solid" filled />
-        個人資料
-      </div>
-      <q-btn unelevated :ripple="false" class="action-btn" label="編輯" />
-    </div>
-    <div class="grid-table user">
-      <div v-for="tdCol in userColspans" :key="`tr_${tdCol.key}`" class="tr">
-        <div>{{ tdCol.name }}</div>
-        <div>{{ userInfo[tdCol.key] }}</div>
-      </div>
-    </div>
-    <div class="row-tilte">
+    <UserInformation/>
+
+    <div class="row-title">
       <div>
         <nuxt-icon name="dog" filled />
         寶貝清單
@@ -92,6 +67,7 @@ function showPetsCategoryName(petTypeId: number) {
         </div>
         <div />
       </div>
+      <div v-if="!userPets?.length" class="tr no-data">無資料</div>
       <div v-for="pet in userPets" :key="`tr_${pet.id}`" class="tr">
         <div
           v-for="tdCol in colspans"
@@ -121,9 +97,9 @@ function showPetsCategoryName(petTypeId: number) {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .user-page {
-  .row-tilte {
+  .row-title {
     display: flex;
     justify-content: space-between;
     .action-btn {
@@ -139,7 +115,10 @@ function showPetsCategoryName(petTypeId: number) {
     &.pets .tr {
       grid-template-columns: 65px 2fr repeat(4, 1fr) 100px;
     }
-    :deep(.nuxt-icon) {
+    .tr {
+      align-items: baseline;
+    }
+    .nuxt-icon {
       fill: var(--primary-dark-color);
       svg {
         transform: scale(1.125);
