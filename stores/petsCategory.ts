@@ -9,7 +9,7 @@ export const usePetsCategoryStore = defineStore('petsCategory', () => {
   const pets = ref<IPetCategory[]>([]);
 
   // select 選擇
-  const selectedId = ref<number | null>(null);
+  const selectedId = ref<number>(0);
   const selectedPet = ref<IPetCategory | null>(null);
 
   function setPetsCategoryApiData(data: IPetCategory[]) {
@@ -17,7 +17,7 @@ export const usePetsCategoryStore = defineStore('petsCategory', () => {
   }
 
   function setSelectedPet(data: IPetCategory | null) {
-    if (!data) selectedId.value = null;
+    if (!data) selectedId.value = 0;
     else selectedId.value = data.id;
     selectedPet.value = data;
   }
