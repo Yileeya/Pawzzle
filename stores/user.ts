@@ -106,6 +106,7 @@ export const useUserStore = defineStore('user', () => {
     return info;
   });
 
+  //#region 寵物相關
   const userPets = computed(()=>{
     return user.value.pets;
   });
@@ -123,10 +124,33 @@ export const useUserStore = defineStore('user', () => {
     return user.value.pets?.find((pet) => pet.is_default === 1) || petInit;
   });
 
+  function updateUserPet(pet: IPet, isDelete: boolean = false) {
+    const index = user.value.pets?.findIndex((p) => p.id === pet.id);
+    if (index === undefined) return;
+    else if (isDelete && index !== -1) {
+      user.value.pets?.splice(index, 1); // 刪除
+    } else if (index === -1) {
+      user.value.pets?.push(pet); // 新增
+    } else {
+      user.value.pets![index] = { ...pet }; // 更新
+    }
+
+    // 預設只能有一隻
+    if(pet.is_default === 1){
+      user.value.pets?.forEach((p) => {
+        if (p.id !== pet.id) {
+          p.is_default = 0;
+        }
+      });
+    }
+  }
+  //#endregion
+
   return {
     login,
     getUser,
     logout,
+    updateUserPet,
     user,
     userInfo,
     userPets,
