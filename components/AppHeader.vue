@@ -160,7 +160,7 @@ const showLoginModal = ref(false);
   .el-separator {
     margin: 3px 0;
     height: 1px;
-    background: #0000001f;
+    border-bottom: 1px solid #0000001f;
   }
   .q-item__section {
     display: flex;
