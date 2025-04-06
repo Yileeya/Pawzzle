@@ -174,7 +174,7 @@ async function save() {
           :error="!!errors.weight"
           :error-message="errors.weight"
         />
-        <div v-if="rowPetData" class="toggle-box">
+        <div class="toggle-box">
           <label>設為預設</label>
           <q-toggle v-model="is_default" :true-value="1" :false-value="0" />
         </div>
