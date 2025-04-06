@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { IPet } from '@/stores/user';
+import { Notify } from 'quasar';
 
 useSeoMeta({
   title: 'Pawzzle Studio 個人資料'
@@ -39,7 +40,7 @@ const colspans: { name: string; key: keyof IPet }[] = [
     key: 'birth_date'
   },
   {
-    name: '重量',
+    name: '重量(kg)',
     key: 'weight'
   }
 ];
@@ -47,6 +48,39 @@ const colspans: { name: string; key: keyof IPet }[] = [
 function showPetsCategoryName(petTypeId: number) {
   return pets.value.find((pet) => pet.id === petTypeId)?.name || '';
 }
+
+//#region pet
+const petModal = ref<{
+  show: boolean;
+  petData: IPet | null;
+}>({
+  show: false,
+  petData: null
+});
+
+function showPetModalHandler(rowPetData: IPet | null) {
+  petModal.value.show = true;
+  petModal.value.petData = rowPetData ? { ...rowPetData } : null;
+}
+
+const deletingId = ref<number>(-1);
+const { updateUserPet } = useUserStore();
+
+const { $api } = useNuxtApp();
+async function deletePetHandler(pet: IPet) {
+  deletingId.value = pet.id;
+  await $api<IPet>(`/pets/${pet.id}`, {
+    method: 'DELETE'
+  }).then(() => {
+    updateUserPet(pet, true);
+    Notify.create({
+      message: '刪除成功！'
+    });
+  }).finally(() => {
+    deletingId.value = -1;
+  });
+}
+//#endregion
 </script>
 
 <template>
@@ -58,7 +92,13 @@ function showPetsCategoryName(petTypeId: number) {
         <nuxt-icon name="dog" filled />
         寶貝清單
       </div>
-      <q-btn unelevated :ripple="false" class="action-btn" label="新增" />
+      <q-btn
+        unelevated
+        :ripple="false"
+        class="action-btn"
+        label="新增"
+        @click="showPetModalHandler(null)"
+      />
     </div>
     <div class="grid-table pets">
       <div class="tr head sticky">
@@ -90,10 +130,28 @@ function showPetsCategoryName(petTypeId: number) {
           <span v-else> {{ pet[tdCol.key] }}</span>
         </div>
         <div class="text-right">
-          <q-btn unelevated :ripple="false" class="action-btn" label="編輯" />
+          <q-btn
+            unelevated
+            :ripple="false"
+            color="negative"
+            class="action-btn"
+            label="刪除"
+            :disabled="deletingId === pet.id"
+            @click="deletePetHandler(pet)"
+          />
+          <q-btn
+            unelevated
+            :ripple="false"
+            class="action-btn"
+            label="編輯"
+            :disabled="deletingId === pet.id"
+            @click="showPetModalHandler(pet)"
+          />
         </div>
       </div>
     </div>
+
+    <UserPetModal v-model="petModal.show" :row-pet-data="petModal.petData" />
   </div>
 </template>
 
@@ -113,10 +171,16 @@ function showPetsCategoryName(petTypeId: number) {
       grid-template-columns: 150px 1fr;
     }
     &.pets .tr {
-      grid-template-columns: 65px 2fr repeat(4, 1fr) 100px;
+      grid-template-columns: 65px 2fr repeat(4, 1fr) 125px;
     }
     .tr {
       align-items: baseline;
+      .text-right {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0;
+      }
     }
     .nuxt-icon {
       fill: var(--primary-dark-color);
@@ -134,6 +198,12 @@ function showPetsCategoryName(petTypeId: number) {
     .grid-table {
       &.pets .tr {
         grid-template-columns: 1fr;
+      }
+      .tr {
+        .text-right {
+          padding: 0 15px;
+          gap: 10px;
+        }
       }
       .action-btn {
         width: 100%;
