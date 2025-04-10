@@ -150,6 +150,7 @@ async function save() {
           v-model="gender"
           v-bind="genderAttrs"
           stack-label
+          label="性別"
           color="secondary"
           :error="!!errors.gender"
         />

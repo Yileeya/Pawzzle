@@ -142,6 +142,8 @@ export const useUserStore = defineStore('user', () => {
           p.is_default = 0;
         }
       });
+      // 設定預設
+      setSelectedPetById(pet.pet_type_id);
     }
   }
   //#endregion

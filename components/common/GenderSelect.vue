@@ -11,7 +11,7 @@ const optionsData = computed(() => {
       name: value
     })
   );
-  return [{ id: '', name: '請選擇', disable: true }, ...genderOptions];
+  return [{ id: '', name: '請選擇性別', disable: true }, ...genderOptions];
 });
 </script>
 
@@ -21,7 +21,6 @@ const optionsData = computed(() => {
     :options="optionsData"
     option-value="id"
     option-label="name"
-    label="性別"
     transition-show="scale"
     transition-hide="scale"
     emit-value
