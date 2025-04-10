@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
-  redirect: '/member/user'
+  redirect: '/member/user',
+  middleware: ['auth']
 });
 
 const userStore = useUserStore();

@@ -5,6 +5,9 @@ import type { IBathProduct } from '@/stores/services';
 useSeoMeta({
   title: 'Pawzzle Studio 美容服務'
 });
+definePageMeta({
+  middleware: ['auth']
+});
 
 const routes = useRoute();
 
