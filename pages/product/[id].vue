@@ -17,8 +17,9 @@ const { services, bathProducts } = storeToRefs(servicesStore);
 const { getServiceById } = servicesStore;
 const pageService = computed(() => getServiceById(Number(routes.params.id)));
 
-const petsCategoryStore = usePetsCategoryStore();
-const { selectedPet } = storeToRefs(petsCategoryStore);
+const { pets } = storeToRefs(usePetsCategoryStore());
+
+const { userPets } = storeToRefs(useUserStore());
 
 const reserveStore = useReserveFormStore();
 const {
@@ -27,9 +28,17 @@ const {
   isTimePeriodValid,
   isBeforeCutoffTimeValid,
   bathId,
+  petId,
+  petTypeId,
   errors
 } = storeToRefs(reserveStore);
-const { validateTimes, clearAllErrorMsg, validate, submit, setSelectedTimePeriod } = reserveStore;
+const {
+  validateTimes,
+  clearAllErrorMsg,
+  validate,
+  submit,
+  setSelectedTimePeriod
+} = reserveStore;
 
 // 預約日期時段顯示
 const dateAndTimes = computed(() => {
@@ -55,10 +64,23 @@ function handleBathProductClick(bathItem: IBathProduct) {
 }
 
 // 價格計算
-function priceCalculation(type: 'default' | 'total'): number {
-  const defaultPrice = pageService.value.price + (selectedPet.value?.extra_price[pageService.value.id] || 0);
+const currentPetTypePrice = computed<number>(() => {
+  let newPetTypeId: number = 0;
 
-  if (type === 'total') return defaultPrice + (selectedBathProduct.value?.price || 0);
+  if (petId.value !== -1) { // 自己的寵物
+    const userPet = userPets.value?.find((pet) => pet.id === petId.value);
+    newPetTypeId = userPet?.pet_type_id || 0;
+  } else newPetTypeId = petTypeId.value; // 新增
+
+  if (newPetTypeId === 0) return 0;
+
+  const newPetType = pets.value.find((pet) => pet.id === newPetTypeId);
+  return newPetType?.extra_price[pageService.value.id] || 0;
+});
+function priceCalculation(type: 'default' | 'total'): number {
+  const defaultPrice = pageService.value.price + currentPetTypePrice.value;
+  if (type === 'total')
+    return defaultPrice + (selectedBathProduct.value?.price || 0);
   else return defaultPrice;
 }
 
@@ -79,9 +101,7 @@ async function clickSubmit() {
         content: result.message
       }
     }).onDismiss(() => {
-      timePeriodStart.value = '';
-      setSelectedTimePeriod([]);
-      navigateTo('/');
+      navigateTo('/member/order');
     });
   }
   sending.value = false;
@@ -173,7 +193,7 @@ onMounted(() => {
         <div class="price-block">
           <div class="detail">
             <span class="h4 number-text">
-              {{ foramtCurrency(priceCalculation("default")) }}
+              {{ foramtCurrency(priceCalculation('default')) }}
             </span>
             <span v-show="selectedBathProduct?.price" class="h6 number-text">
               +{{ selectedBathProduct?.price }}
@@ -183,11 +203,16 @@ onMounted(() => {
             總計
             <span class="h4 number-text">
               NT
-              {{ foramtCurrency(priceCalculation("total")) }}
+              {{ foramtCurrency(priceCalculation('total')) }}
             </span>
           </div>
         </div>
-        <q-btn unelevated class="submit-btn" :disable="sending" @click.prevent="clickSubmit">
+        <q-btn
+          unelevated
+          class="submit-btn"
+          :disable="sending"
+          @click.prevent="clickSubmit"
+        >
           送出訂單
         </q-btn>
       </div>
@@ -289,7 +314,7 @@ onMounted(() => {
       cursor: pointer;
       text-align: center;
 
-      input[type="radio"] {
+      input[type='radio'] {
         display: none;
       }
 

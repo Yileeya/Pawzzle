@@ -1,6 +1,5 @@
 import { useForm } from 'vee-validate';
 import * as Yup from 'yup';
-import { usePetsCategoryStore } from '@/stores/petsCategory';
 import { useUserStore } from '@/stores/user';
 
 interface iTimeSlot {
@@ -23,13 +22,28 @@ const schema = Yup.object({
     .required(),
   user: Yup.object({
     name: Yup.string().required('請輸入姓名。'),
-    phone: Yup.string().nullable().notRequired()
-    // .required('手機號碼須以09開頭，且為10位數字。')
-    // .matches(/^09\d{8}$/, '手機號碼須以09開頭，且為10位數字。')
+    phone: Yup.string()
+      .required('手機號碼須以09開頭，且為10位數字。')
+      .matches(/^09\d{8}$/, '手機號碼須以09開頭，且為10位數字。')
   }),
   pet: Yup.object({
-    type: Yup.number().required('請選擇寵物類別。'),
-    name: Yup.string().required('請輸入寶貝名字。')
+    // 新增時其他的欄位才是必填
+    id: Yup.number().required('請選擇寵物。'),
+    name: Yup.string().when('id', {
+      is: -1,
+      then: (schema) => schema.required('請輸入寶貝名字。'),
+      otherwise: (schema) => schema.notRequired()
+    }),
+    pet_type_id: Yup.number().when('id', {
+      is: -1,
+      then: (schema) => schema.required('請選擇種類').moreThan(0, '請選擇種類'),
+      otherwise: (schema) => schema.notRequired()
+    }),
+    gender: Yup.string().when('id', {
+      is: -1,
+      then: (schema) => schema.required('請選擇性別。'),
+      otherwise: (schema) => schema.notRequired()
+    })
   }),
   bathId: Yup.number().nullable().notRequired()
 });
@@ -37,25 +51,24 @@ const schema = Yup.object({
 export const useReserveFormStore = defineStore('reserveForm', () => {
   const { $api } = useNuxtApp();
 
-  // petsCategoryStore
-  const petsCategoryStore = usePetsCategoryStore();
-  const { selectedId: petTypeId } = toRefs(petsCategoryStore);
-
   // userStore
   const userStore = useUserStore();
-  const { user, userDefaultPet } = toRefs(userStore);
+  const { getUser } = userStore;
+  const { userInfo } = toRefs(userStore);
 
   const initialValues = {
     timePeriodStart: '',
     isTimePeriodValid: false,
     isBeforeCutoffTimeValid: false,
     user: {
-      name: user.value.name,
-      phone: user.value.phone
+      name: '',
+      phone: ''
     },
     pet: {
-      type: petTypeId.value,
-      name: userDefaultPet.value.id ? userDefaultPet.value.name : ''
+      id: 0,
+      name: '',
+      pet_type_id: 0,
+      gender: ''
     },
     bathId: null as number | null
   };
@@ -76,28 +89,15 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
   // 使用者資訊
   const [name, nameAttrs] = defineField('user.name');
   const [phone, phoneAttrs] = defineField('user.phone');
-  const [petType] = defineField('pet.type');
+
+  // pet
+  const [petId, petIdAttrs] = defineField('pet.id');
   const [petName, petNameAttrs] = defineField('pet.name');
+  const [petTypeId, petTypeIdAttrs] = defineField('pet.pet_type_id');
+  const [petGender, petGenderAttrs] = defineField('pet.gender');
 
   // 加值服務
   const [bathId] = defineField('bathId');
-
-  // 監聽寵物類別，同步賦值
-  watch(
-    () => petTypeId.value,
-    (newVal) => {
-      petType.value = newVal;
-    }
-  );
-
-  // 監聽使用者，同步賦值
-  watch(
-    () => user.value,
-    (newVal) => {
-      name.value = newVal.name;
-      phone.value = newVal.phone;
-    }
-  );
 
   // 選擇的時段
   function setSelectedTimePeriod(data: iTimeSlot[]) {
@@ -114,17 +114,41 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     resetForm({ values: values });
   }
 
+  interface iSubmitForm {
+    service_id: number;
+    bath_product_id?: number | null;
+    price: number;
+    pet_appointment_details: string[];
+    pet: {
+      id?: number;
+      name?: string;
+      pet_type_id?: number;
+      gender?: string;
+    };
+    name: string;
+    phone: string;
+  }
+
   async function submit(
     serviceId: number,
     price: number
   ): Promise<iReserveApiResult> {
-    const form = {
-      pet_id: userDefaultPet.value.id,
+    const form: iSubmitForm = {
       service_id: serviceId,
       bath_product_id: bathId.value,
       price: price,
-      pet_appointment_details: selectedTimePeriod.value.map((time) => time.key)
+      pet_appointment_details: selectedTimePeriod.value.map((time) => time.key),
+      pet: {},
+      name: name.value,
+      phone: phone.value
     };
+
+    if (values.pet.id === -1) { // 寵物新增
+      const { id, ...petNewData } = values.pet;
+      form.pet = { ...petNewData };
+    } else {
+      form.pet.id = values.pet.id;
+    }
 
     const result: iReserveApiResult = {
       type: 'error',
@@ -138,6 +162,26 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
       .then(() => {
         result.type = 'success';
         result.message = ['新增成功！'];
+
+        // 新增寵物、使用者資料變更：刷新使用者資料
+        if (
+          petId.value === -1 ||
+          name.value !== userInfo.value.name ||
+          phone.value !== userInfo.value.phone
+        ) {
+          getUser();
+        }
+        const resetFormData = {
+          ...values,
+          timePeriodStart: '',
+          isTimePeriodValid: false,
+          isBeforeCutoffTimeValid: false,
+          bathId: null
+        };
+        if (petId.value === -1) {
+          resetFormData.pet = { ...initialValues.pet };
+        }
+        resetForm({ values: resetFormData, errors: {} });
       })
       .catch((err) => {
         result.type = 'error';
@@ -151,12 +195,12 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     timePeriodStart,
     isTimePeriodValid,
     isBeforeCutoffTimeValid,
-    name,
-    nameAttrs,
-    phone,
-    phoneAttrs,
-    petName,
-    petNameAttrs,
+    name, nameAttrs,
+    phone, phoneAttrs,
+    petId, petIdAttrs,
+    petName, petNameAttrs,
+    petTypeId, petTypeIdAttrs,
+    petGender, petGenderAttrs,
     bathId,
     errors,
     validateTimes,
