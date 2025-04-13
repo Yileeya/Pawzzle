@@ -10,6 +10,7 @@ const tokenCookie = useCookie('token');
 
 const userStore = useUserStore();
 const { logout } = userStore;
+const { userIsAdmin } = storeToRefs(userStore);
 const showLoginModal = ref(false);
 </script>
 
@@ -32,6 +33,7 @@ const showLoginModal = ref(false);
         />
         <q-btn-dropdown v-else flat class="user-dropdown-btn">
           <template #label>
+            <span v-if="userIsAdmin" class="admin-text">管理員</span>
             <q-avatar size="xl">
               <img src="/images/user-avatar.png" alt="user-avatar" >
             </q-avatar>
@@ -43,14 +45,14 @@ const showLoginModal = ref(false);
                 預約紀錄
               </q-item-section>
             </q-item>
-            <div class="el-separator"/>
+            <div class="el-separator" />
             <q-item v-close-popup clickable @click="routerTo('member/user')">
               <q-item-section>
                 <nuxt-icon name="circle-user-solid" filled />
                 個人資料
               </q-item-section>
             </q-item>
-            <div class="el-separator"/>
+            <div class="el-separator" />
             <q-item v-close-popup clickable @click="logout()">
               <q-item-section>
                 <nuxt-icon name="arrow-right-from-bracket" filled />
@@ -100,6 +102,10 @@ const showLoginModal = ref(false);
       }
       .user-dropdown-btn {
         border-radius: 10px;
+        .admin-text {
+          font-size: 1rem;
+          margin-right: 10px;
+        }
       }
       .login-btn {
         background: var(--primary-light-hover-color);

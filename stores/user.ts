@@ -77,7 +77,7 @@ export const useUserStore = defineStore('user', () => {
 
     await $api<IUser>('/user').then((response) => {
       user.value = response;
-      if(response.pets?.length){
+      if (response.pets?.length) {
         setSelectedPetById(userDefaultPet.value.pet_type_id);
       }
     });
@@ -107,7 +107,7 @@ export const useUserStore = defineStore('user', () => {
   });
 
   //#region 寵物相關
-  const userPets = computed(()=>{
+  const userPets = computed(() => {
     return user.value.pets;
   });
 
@@ -136,7 +136,7 @@ export const useUserStore = defineStore('user', () => {
     }
 
     // 預設只能有一隻
-    if(pet.is_default === 1){
+    if (pet.is_default === 1) {
       user.value.pets?.forEach((p) => {
         if (p.id !== pet.id) {
           p.is_default = 0;
@@ -148,6 +148,12 @@ export const useUserStore = defineStore('user', () => {
   }
   //#endregion
 
+  //#region 使用者角色
+  const userIsAdmin = computed(() => {
+    return user.value.roles.some((role) => role.id === 3);
+  });
+  //#endregion
+
   return {
     login,
     getUser,
@@ -156,6 +162,7 @@ export const useUserStore = defineStore('user', () => {
     user,
     userInfo,
     userPets,
-    userDefaultPet
+    userDefaultPet,
+    userIsAdmin
   };
 });
