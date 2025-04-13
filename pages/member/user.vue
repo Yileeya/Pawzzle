@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IPet } from '@/stores/user';
-import { Notify } from 'quasar';
+import { Notify, Dialog } from 'quasar';
+import DialogComponent from '@/components/common/Dialog.vue';
 
 useSeoMeta({
   title: 'Pawzzle Studio 個人資料'
@@ -67,8 +68,25 @@ const deletingId = ref<number>(-1);
 const { updateUserPet } = useUserStore();
 
 const { $api } = useNuxtApp();
-async function deletePetHandler(pet: IPet) {
+
+function showDeleteDialogHandler(pet: IPet) {
   deletingId.value = pet.id;
+  Dialog.create({
+    component: DialogComponent,
+    componentProps: {
+      mode: 'confirm',
+      content: ['確定要刪除此筆資料嗎？會一併刪除相關訂單。']
+    }
+  })
+    .onOk(() => {
+      deletePetHandler(pet);
+    })
+    .onCancel(() => {
+      deletingId.value = -1;
+    });
+}
+
+async function deletePetHandler(pet: IPet) {
   await $api<IPet>(`/pets/${pet.id}`, {
     method: 'DELETE'
   }).then(() => {
@@ -137,7 +155,7 @@ async function deletePetHandler(pet: IPet) {
             class="action-btn"
             label="刪除"
             :disabled="deletingId === pet.id"
-            @click="deletePetHandler(pet)"
+            @click="showDeleteDialogHandler(pet)"
           />
           <q-btn
             unelevated
