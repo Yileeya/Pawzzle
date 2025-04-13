@@ -4,6 +4,8 @@ import type { IPetCategory } from '@/stores/petsCategory';
 
 const loadingIndicator = useLoadingIndicator();
 
+const { setLayoutLoading } = useUiUxStore();
+
 // api fetch
 const { setServicesApiData } = useServicesStore();
 const { setPetsCategoryApiData } = usePetsCategoryStore();
@@ -35,7 +37,9 @@ await useAsyncData('servicesAndPetsCategory', async () => {
 });
 
 onMounted(async () => {
+  setLayoutLoading(true);
   await getUser();
+  setLayoutLoading(false);
 });
 
 // scroll to top
@@ -44,6 +48,7 @@ const { showButton, scrollToTop } = useScrollToTop();
 
 <template>
   <q-layout view="hHh lpR fFf">
+    <AppLoading />
     <AppHeader />
 
     <q-page-container>

@@ -7,11 +7,14 @@ definePageMeta({
 const userStore = useUserStore();
 const { userInfo } = storeToRefs(userStore);
 
+const { setLayoutLoading } = useUiUxStore();
+
 // pinia list
 const { $api } = useNuxtApp();
 const { setGenderList, setOrderStatusList } = useTypeListStore();
 
 await useAsyncData('typeList', async () => {
+  setLayoutLoading(true);
   const apis = [$api('/statusList'), $api('/genderList')];
   const [statusList, genderList] = await Promise.allSettled(apis);
 
@@ -23,7 +26,7 @@ await useAsyncData('typeList', async () => {
 
   setGenderList(normalizedGenderList);
   setOrderStatusList(normalizedStatusList);
-
+  setLayoutLoading(false);
   return {
     statusList: normalizedStatusList,
     genderList: normalizedGenderList

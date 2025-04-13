@@ -36,6 +36,17 @@ const { data, execute, status } = useApi<{
   watch: false
 });
 
+//# region loading
+const { setPageLoading } = useUiUxStore();
+watch(status, (newVal) => {
+  if (newVal === 'pending') {
+    setPageLoading(true);
+  } else if (newVal === 'success' || newVal === 'error') {
+    setPageLoading(false);
+  }
+}, { immediate: true });
+//# endregion
+
 const tables = computed(() => {
   return [
     {

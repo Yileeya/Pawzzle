@@ -1,5 +1,6 @@
 <script setup lang="ts">
 // pinia
+const { setPageLoading } = useUiUxStore();
 const reserveStore = useReserveFormStore();
 const {
   name, nameAttrs,
@@ -69,13 +70,15 @@ const { getGenderList } = typeListStore;
 const { genderList } = toRefs(typeListStore);
 //#endregion
 
-onMounted(() => {
+onMounted(async () => {
   setUserInfo();
   setUserPetId();
   if (Object.keys(genderList.value).length === 0) {
-    getGenderList();
+    setPageLoading(true);
+    await getGenderList();
+    setPageLoading(false);
   }
-  clearAllErrorMsg();
+  await clearAllErrorMsg();
 });
 </script>
 
