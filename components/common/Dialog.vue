@@ -3,7 +3,7 @@
 import { useDialogPluginComponent } from 'quasar';
 
 defineProps<{
-  mode: 'success' | 'error' | 'login';
+  mode: 'success' | 'error' | 'login' | 'confirm';
   content?: string[];
 }>();
 defineEmits([...useDialogPluginComponent.emits]);
@@ -40,7 +40,8 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
             </div>
             <div v-else>
               <div class="title">
-                <nuxt-icon name="triangle-exclamation" filled />錯誤！
+                <nuxt-icon name="triangle-exclamation" filled />
+                {{ mode === 'error' ? '錯誤！' : '注意!' }}
               </div>
               <ul :class="{ 'string-style': content?.length === 1 }">
                 <li v-for="msg in content" :key="`dialog_${msg}`">
@@ -50,6 +51,26 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
             </div>
           </div>
         </div>
+        <footer v-if="mode === 'confirm'">
+          <q-btn
+            class="action-btn"
+            text-color="white"
+            style="background: var(--secondary-dark-color)"
+            label="取消"
+            unelevated
+            :ripple="false"
+            @click="onDialogCancel"
+          />
+          <q-btn
+            class="action-btn"
+            label="確定"
+            unelevated
+            text-color="var(--secondary-dark-color)"
+            color="primary"
+            :ripple="false"
+            @click="onDialogOK"
+          />
+        </footer>
       </div>
     </Suspense>
   </q-dialog>
@@ -118,6 +139,13 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
         }
       }
     }
+    &.confirm {
+      flex-direction: column;
+      background-color: white;
+      .dialog-bg {
+        color: var(--primary-hover-color);
+      }
+    }
 
     .container {
       flex: 1;
@@ -178,6 +206,18 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
       &:hover {
         cursor: pointer;
         transform: rotate(225deg);
+      }
+    }
+
+    footer {
+      z-index: 2;
+      text-align: right;
+      .action-btn {
+        border-radius: 10px;
+        width: 75px;
+        &:first-child {
+          margin: 0 10px;
+        }
       }
     }
   }
