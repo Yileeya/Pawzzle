@@ -26,6 +26,7 @@ const optionsData = computed<{ id: string; name: string }[]>(() => {
     popup-content-class="el-select-pupup-content"
     options-selected-class="options-selected"
     outlined
+    behavior="default"
   />
 </template>
 

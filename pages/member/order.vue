@@ -148,13 +148,13 @@ async function updateStatusHandler(statusString: string, id: number) {
         {{ table.title }}
       </div>
 
-      <div class="grid-table">
+      <div class="grid-table" :class="{'admin': userIsAdmin}">
         <div class="tr head sticky">
           <div>預約日期/時段</div>
           <div v-for="thCol in colspans" :key="`th_${thCol.key}`">
             {{ thCol.name }}
           </div>
-          <div>{{ table.key === 'feature' ? '' : '狀態' }}</div>
+          <div class="action-div">{{ table.key === 'feature' ? '' : '狀態' }}</div>
         </div>
         <div v-if="!table.data.length" class="tr no-data">無資料</div>
         <q-expansion-item
@@ -181,15 +181,14 @@ async function updateStatusHandler(statusString: string, id: number) {
                 </span>
                 <span v-else>{{ item[tdCol.key] }}</span>
               </div>
-              <div @click.stop>
-                <MemberStatusSelect
-                  v-if="userIsAdmin"
-                  :model-value="item.status"
-                  :disable="item.status === 'timeout'"
-                  @update:model-value="
-                    (newVal) => updateStatusHandler(newVal, item.id)
-                  "
-                />
+              <div class="action-div" :data-title="!userIsAdmin && table.key !== 'feature' ? '狀態' : ''">
+                <div v-if="userIsAdmin" @click.stop>
+                  <MemberStatusSelect
+                    :model-value="item.status"
+                    :disable="item.status === 'timeout'"
+                    @update:model-value="(newVal) => updateStatusHandler(newVal, item.id)"
+                  />
+                </div>
                 <q-btn
                   v-else-if="table.key === 'feature'"
                   unelevated
@@ -276,7 +275,7 @@ async function updateStatusHandler(statusString: string, id: number) {
         }
       }
       .content {
-        padding: 10px 0;
+        padding: 5px 10px 10px;
         .remark-row {
           padding: 5px 15px;
           background: var(--primary-hover-color);
@@ -286,6 +285,20 @@ async function updateStatusHandler(statusString: string, id: number) {
     }
     .action-btn {
       width: 90px;
+    }
+
+    &.admin {
+      .tr {
+        &.head {
+          padding-right: 55px; //icon
+        }
+        .action-div {
+          padding: 0;
+        }
+      }
+      :deep(.tr-item) .q-item__section {
+        padding-left: 15px;
+      }
     }
   }
 
@@ -316,13 +329,21 @@ async function updateStatusHandler(statusString: string, id: number) {
           padding: 10px;
         }
         .content {
-          padding: 0 15px 10px;
           margin-right: 45px;
         }
       }
       .action-btn {
         width: 100%;
         margin-top: 10px;
+      }
+
+      &.admin {
+        .tr .action-div {
+          padding-left: 15px;
+          :deep(.status-select) {
+            margin-top: 5px;
+          }
+        }
       }
     }
   }
