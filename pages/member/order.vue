@@ -74,6 +74,8 @@ function formatTime(timeString: string) {
 const typeListStore = useTypeListStore();
 const { orderStatusList } = storeToRefs(typeListStore);
 
+const { userIsAdmin } = storeToRefs(useUserStore());
+
 //#region delete
 const $q = useQuasar();
 const { $api } = useNuxtApp();
@@ -111,11 +113,23 @@ async function deleteOrderHandler(id: number) {
     });
 }
 //#endregion
+
+//#region update status
+async function updateStatusHandler(statusString: string, id: number) {
+  await $api(`/appointments/${id}`, {
+    method: 'PATCH',
+    body: { status: statusString }
+  }).then(() => {
+    $q.notify({ message: '修改成功！' });
+    execute();
+  });
+}
+//#endregion
 </script>
 
 <template>
   <div class="member-order-page">
-    <div class="search-row">
+    <div v-if="!userIsAdmin" class="search-row">
       <label class="title text-center">寶貝名字</label>
       <UserPetsSelect v-model="userPetId" :has-all="true" :selected-default="false"/>
       <q-btn
@@ -167,9 +181,17 @@ async function deleteOrderHandler(id: number) {
                 </span>
                 <span v-else>{{ item[tdCol.key] }}</span>
               </div>
-              <div>
+              <div @click.stop>
+                <MemberStatusSelect
+                  v-if="userIsAdmin"
+                  :model-value="item.status"
+                  :disable="item.status === 'timeout'"
+                  @update:model-value="
+                    (newVal) => updateStatusHandler(newVal, item.id)
+                  "
+                />
                 <q-btn
-                  v-if="table.key === 'feature'"
+                  v-else-if="table.key === 'feature'"
                   unelevated
                   :ripple="false"
                   class="action-btn"
