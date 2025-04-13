@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Dialog from '@/components/common/Dialog.vue';
+
 useSeoMeta({
   title: 'Pawzzle Studio 我的訂單'
 });
@@ -71,6 +73,44 @@ function formatTime(timeString: string) {
 // pinia typeListStore
 const typeListStore = useTypeListStore();
 const { orderStatusList } = storeToRefs(typeListStore);
+
+//#region delete
+const $q = useQuasar();
+const { $api } = useNuxtApp();
+const deletingId = ref<number>(-1);
+
+function showDeleteDialogHandler(id: number) {
+  deletingId.value = id;
+  $q.dialog({
+    component: Dialog,
+    componentProps: {
+      mode: 'confirm',
+      content: ['確定要刪除此筆資料嗎？刪除後無法復原。']
+    }
+  })
+    .onOk(() => {
+      deleteOrderHandler(id);
+    })
+    .onCancel(() => {
+      deletingId.value = -1;
+    });
+}
+
+async function deleteOrderHandler(id: number) {
+  await $api(`/appointments/${id}`, {
+    method: 'DELETE'
+  })
+    .then(() => {
+      $q.notify({ message: '刪除成功！' });
+      const rowIndex = data.value?.booked?.findIndex((item) => item.id === id);
+      if (rowIndex === -1 || rowIndex === undefined) return;
+      data.value?.booked?.splice(rowIndex, 1);
+    })
+    .finally(() => {
+      deletingId.value = -1;
+    });
+}
+//#endregion
 </script>
 
 <template>
@@ -115,7 +155,7 @@ const { orderStatusList } = storeToRefs(typeListStore);
               <div data-title="預約日期/時段">
                 {{ item.appointment_date }}　
                 {{ formatTime(item.appointment_start_time) }}~
-                {{ formatTime(item.appointment_end_time) }}
+                {{ calculateEndTime(item.appointment_end_time, 30) }}
               </div>
               <div
                 v-for="tdCol in colspans"
@@ -134,6 +174,8 @@ const { orderStatusList } = storeToRefs(typeListStore);
                   :ripple="false"
                   class="action-btn"
                   label="取消訂單"
+                  :disable="deletingId === item.id"
+                  @click.stop="showDeleteDialogHandler(item.id)"
                 />
                 <span v-else>{{ orderStatusList[item.status] || '-' }}</span>
               </div>
