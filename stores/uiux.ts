@@ -1,5 +1,5 @@
 export const useUiUxStore = defineStore('uiux', () => {
-  const layoutLoading = ref(false);
+  const layoutLoading = ref(true);
   const pageLoading = ref(false);
   const loadingStartTime = ref(0);
   const MIN_LOADING_TIME = 1500;

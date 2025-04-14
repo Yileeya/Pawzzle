@@ -115,65 +115,88 @@ onMounted(async () => {
         placeholder="聯絡電話"
       />
     </div>
-    <div class="input-group">
+    <div class="pet-input-group">
       <label>寶貝資訊</label>
-      <UserPetsSelect
-        v-model="petId"
-        v-bind="petIdAttrs"
-        :add-mode="true"
-        :selected-default="false"
-        class="flex-150"
-      />
-      <CommonPetCategorySelect
-        v-model="petTypeId"
-        v-bind="petTypeIdAttrs"
-        hide-bottom-space
-        :is-async-store="false"
-        :error="!!errors['pet.pet_type_id']"
-        outlined
-        dense
-        rounded
-        class="flex-200"
-        :readonly="petId !== -1"
-      />
-      <template v-if="petId === -1">
-        <CommonGenderSelect
-          v-model="petGender"
-          v-bind="petGenderAttrs"
-          outlined
-          dense
-          rounded
-          hide-bottom-space
-          :error="!!errors['pet.gender']"
+      <div class="group">
+        <UserPetsSelect
+          v-model="petId"
+          v-bind="petIdAttrs"
+          :add-mode="true"
+          :selected-default="false"
           class="flex-150"
         />
-        <q-input
-          v-model="petName"
-          v-bind="petNameAttrs"
-          :error="!!errors['pet.name']"
+        <CommonPetCategorySelect
+          v-model="petTypeId"
+          v-bind="petTypeIdAttrs"
           hide-bottom-space
+          :is-async-store="false"
+          :error="!!errors['pet.pet_type_id']"
           outlined
           dense
           rounded
-          placeholder="寶貝名字"
-          class="pet-name"
+          class="flex-200"
+          :readonly="petId !== -1"
         />
-      </template>
+        <template v-if="petId === -1">
+          <CommonGenderSelect
+            v-model="petGender"
+            v-bind="petGenderAttrs"
+            outlined
+            dense
+            rounded
+            hide-bottom-space
+            :error="!!errors['pet.gender']"
+            class="flex-150"
+          />
+          <q-input
+            v-model="petName"
+            v-bind="petNameAttrs"
+            :error="!!errors['pet.name']"
+            hide-bottom-space
+            outlined
+            dense
+            rounded
+            placeholder="寶貝名字"
+            class="flex-200"
+          />
+        </template>
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped lang="scss">
-:deep(.input-group) {
-  .flex-200 {
-    flex: 1 1 200px;
+.pet-input-group {
+  display: grid;
+  align-items: baseline;
+  grid-template-columns: 90px 1fr;
+  gap: 5px;
+
+  :deep(.group) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    .flex-200 {
+      flex: 1 1 200px;
+    }
+    .flex-150 {
+      flex: 1 1 150px;
+    }
   }
-  .flex-150 {
-    flex: 1 1 150px;
-  }
-  .pet-name {
-    padding-left: 95px;
-    flex: 1;
+
+  @include set-rwd(xs) {
+    display: block;
+    :deep(.group) {
+      margin-top: 3px;
+
+      .flex-200, .flex-150 {
+        flex: 1 1 100%;
+        margin-top: 2px;
+        .q-field__control {
+          border-radius: 10px;
+        }
+      }
+    }
   }
 }
 </style>
