@@ -37,6 +37,7 @@ export const useUserStore = defineStore('user', () => {
   const { $api } = useNuxtApp();
 
   const { setSelectedPetById } = usePetsCategoryStore();
+  const { resetInitFormData: resetReserveFormData } = useReserveFormStore();
 
   const userInit = {
     id: 0,
@@ -99,6 +100,7 @@ export const useUserStore = defineStore('user', () => {
     const token = useCookie('token');
     token.value = '';
     user.value = { ...userInit };
+    resetReserveFormData();
   }
 
   const userInfo = computed<IUserInfo>(() => {

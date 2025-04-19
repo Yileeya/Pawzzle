@@ -114,6 +114,10 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     resetForm({ values: values });
   }
 
+  function resetInitFormData() {
+    resetForm({ values: initialValues, errors: {} });
+  }
+
   interface iSubmitForm {
     service_id: number;
     bath_product_id?: number | null;
@@ -207,6 +211,7 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
     clearAllErrorMsg,
     validate,
     submit,
-    setSelectedTimePeriod
+    setSelectedTimePeriod,
+    resetInitFormData
   };
 });
