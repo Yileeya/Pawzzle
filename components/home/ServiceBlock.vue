@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { IService, IBathProduct } from '@/stores/services';
+import { Dialog } from 'quasar';
+import DialogComponent from '@/components/common/Dialog.vue';
 
 interface Props {
   service: IService;
@@ -10,7 +12,17 @@ const { extraPrice = 0 } = defineProps<Props>();
 
 // 跳轉至產品頁
 function goToProductPage(id: number) {
-  navigateTo(`/product/${id}`);
+  const token = useCookie('token');
+
+  if (token.value) navigateTo(`/product/${id}`);
+  else {
+    Dialog.create({
+      component: DialogComponent,
+      componentProps: {
+        mode: 'login'
+      }
+    });
+  }
 }
 </script>
 

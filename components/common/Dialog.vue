@@ -31,8 +31,7 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
           <div class="content">
             <nuxt-icon name="logo" class="logo" filled />
             <div v-if="mode === 'login'" class="login-message">
-              預約請先
-              <q-btn class="btn-login" unelevated @click="onDialogOK">登入/註冊</q-btn>
+              請先登入才能進行預約喔！
             </div>
             <div v-else-if="mode === 'success'" class="title">
               {{ content?.[0] }}
@@ -101,16 +100,6 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
         display: flex;
         align-items: center;
         gap: 10px;
-        .btn-login {
-          background-color: var(--secondary-color);
-          color: white;
-          font-size: 1.125rem;
-          border-radius: 10px;
-          padding: 0 1rem;
-          min-height: 35px;
-          letter-spacing: 1px;
-          font-weight: 400;
-        }
       }
     }
     &.success {
