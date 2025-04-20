@@ -19,6 +19,11 @@ const { pets } = storeToRefs(petsCategoryStore);
 const typeListStore = useTypeListStore();
 const { genderList } = storeToRefs(typeListStore);
 
+// reserveFormStore
+const reserveFormStore = useReserveFormStore();
+const { resetInitFormData } = reserveFormStore;
+const { petId: reservePetId } = storeToRefs(reserveFormStore);
+
 const colspans: { name: string; key: keyof IPet }[] = [
   {
     name: '預設',
@@ -96,6 +101,9 @@ async function deletePetHandler(pet: IPet) {
     });
   }).finally(() => {
     deletingId.value = -1;
+    if (reservePetId.value === pet.id) {
+      resetInitFormData();
+    }
   });
 }
 //#endregion
