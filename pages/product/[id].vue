@@ -36,8 +36,7 @@ const {
   validateTimes,
   clearAllErrorMsg,
   validate,
-  submit,
-  setSelectedTimePeriod
+  submit
 } = reserveStore;
 
 // 預約日期時段顯示

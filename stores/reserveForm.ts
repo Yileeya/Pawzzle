@@ -1,6 +1,5 @@
 import { useForm } from 'vee-validate';
 import * as Yup from 'yup';
-import { useUserStore } from '@/stores/user';
 
 interface iTimeSlot {
   key: string;
@@ -50,11 +49,6 @@ const schema = Yup.object({
 
 export const useReserveFormStore = defineStore('reserveForm', () => {
   const { $api } = useNuxtApp();
-
-  // userStore
-  const userStore = useUserStore();
-  const { getUser } = userStore;
-  const { userInfo } = toRefs(userStore);
 
   const initialValues = {
     timePeriodStart: '',
@@ -158,6 +152,11 @@ export const useReserveFormStore = defineStore('reserveForm', () => {
       type: 'error',
       message: []
     };
+
+    // userStore
+    const userStore = useUserStore();
+    const { getUser } = userStore;
+    const { userInfo } = storeToRefs(userStore);
 
     await $api('/appointments', {
       method: 'POST',
