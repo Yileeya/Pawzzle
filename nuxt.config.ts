@@ -12,7 +12,8 @@ export default defineNuxtConfig({
   ],
   runtimeConfig:{
     public:{
-      apiUrl: process.env.NUXT_API_BASE_URL
+      apiUrl: process.env.NUXT_API_BASE_URL,
+      googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID
     }
   },
   quasar: {
