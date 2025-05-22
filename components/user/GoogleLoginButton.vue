@@ -1,44 +1,41 @@
 <script setup lang="ts">
 const config = useRuntimeConfig();
+const clientId = config.public.googleClientId;
 
 const { googleLogin } = useUserStore();
 
-const clientId = config.public.googleClientId;
-const scope = encodeURIComponent('openid email profile');
-const redirectUri = computed(() => {
-  if (import.meta.client) {
-    return `${window.location.origin}/oauth-callback.html`;
-  }
-  return '';
+const handleCredentialResponse = async (response: { credential: string; }) => {
+  const idToken = response.credential;
+  await googleLogin(idToken);
+};
+
+onMounted(() => {
+  // 載入 Google Identity SDK
+  const script = document.createElement('script');
+  script.src = 'https://accounts.google.com/gsi/client';
+  script.async = true;
+  script.defer = true;
+  script.onload = () => {
+    window.google.accounts.id.initialize({
+      client_id: clientId,
+      callback: handleCredentialResponse
+    });
+
+    window.google.accounts.id.renderButton(
+        document.getElementById('g_id_signin'),
+        {
+          theme: 'outline', // 或 filled_blue, filled_black
+          size: 'large', // small, medium, large
+          shape: 'pill' // 或 rectangular, pill
+        }
+    );
+  };
+  document.head.appendChild(script);
 });
-
-const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri.value)}&scope=${scope}&response_type=code&access_type=offline&include_granted_scopes=true`;
-
-function loginWithGoogle() {
-  const popup = window.open(authUrl, 'google_oauth', 'width=500,height=600');
-
-  window.addEventListener('message', async (event) => {
-    if (event.origin !== window.location.origin) return;
-    if (event.data.type === 'oauth_code') {
-      const code = event.data.code;
-      popup?.close();
-
-      await googleLogin(code, redirectUri.value);
-    }
-  }, { once: true });
-}
 </script>
 
 <template>
-  <q-btn
-    class="login-btn"
-    flat
-    unelevated
-    :ripple="false"
-    @click="loginWithGoogle"
-  >
-    <nuxt-icon name="google" filled/>
-  </q-btn>
+  <div id="g_id_signin"></div>
 </template>
 
 <style lang="scss">

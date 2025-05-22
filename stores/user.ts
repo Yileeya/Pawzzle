@@ -72,11 +72,11 @@ export const useUserStore = defineStore('user', () => {
     return isSuccessful;
   }
 
-  async function googleLogin(socialite_token: string, redirect_uri: string) {
+  async function googleLogin(socialite_token: string) {
     const token = useCookie('token', { maxAge: 86400 });
     await $api<{ accessToken: string }>('/google/login', {
       method: 'POST',
-      body: { socialite_token, redirect_uri }
+      body: { socialite_token }
     })
       .then(async (response) => {
         token.value = response.accessToken;
