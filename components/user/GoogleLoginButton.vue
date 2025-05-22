@@ -21,6 +21,8 @@ onMounted(() => {
       callback: handleCredentialResponse
     });
 
+    window.google.accounts.id.prompt();
+
     window.google.accounts.id.renderButton(
         document.getElementById('g_id_signin'),
         {

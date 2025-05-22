@@ -29,6 +29,7 @@ declare global {
                         text?: 'signin_with' | 'signup_with' | 'continue_with';
                         logo_alignment?: 'left' | 'center';
                     }) => void;
+                    prompt: () => void;
                 };
             };
         };
