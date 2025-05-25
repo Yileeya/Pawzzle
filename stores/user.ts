@@ -72,6 +72,25 @@ export const useUserStore = defineStore('user', () => {
     return isSuccessful;
   }
 
+  async function googleLogin(socialite_token: string) {
+    const token = useCookie('token', { maxAge: 86400 });
+    await $api<{ accessToken: string }>('/google/login', {
+      method: 'POST',
+      body: { socialite_token }
+    })
+      .then(async (response) => {
+        token.value = response.accessToken;
+        await nextTick(); // 等待 token 寫入完成
+        await getUser();
+        Notify.create({
+          message: '登入成功！'
+        });
+      })
+      .catch(() => {
+        resetUser();
+      });
+  }
+
   async function getUser() {
     const token = useCookie('token');
     if (!token.value) return;
@@ -158,6 +177,7 @@ export const useUserStore = defineStore('user', () => {
 
   return {
     login,
+    googleLogin,
     getUser,
     logout,
     updateUserPet,

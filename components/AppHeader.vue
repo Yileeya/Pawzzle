@@ -22,15 +22,9 @@ const showLoginModal = ref(false);
           <nuxt-icon name="logo" filled class="logo" @click="routerTo('')" />
           <a class="router-link" @click="routerTo('', true)">美容服務</a>
         </div>
-        <q-btn
-          v-if="!tokenCookie"
-          class="login-btn"
-          flat
-          unelevated
-          :ripple="false"
-          label="登入"
-          @click="showLoginModal = true"
-        />
+
+        <UserGoogleLoginButton  v-if="!tokenCookie"/>
+
         <q-btn-dropdown v-else flat class="user-dropdown-btn">
           <template #label>
             <span v-if="userIsAdmin" class="admin-text">管理員</span>
@@ -106,15 +100,6 @@ const showLoginModal = ref(false);
           font-size: 1rem;
           margin-right: 10px;
         }
-      }
-      .login-btn {
-        background: var(--primary-light-hover-color);
-        color: var(--secondary-color);
-        font-size: 1.125rem;
-        border-radius: 10px;
-        letter-spacing: 2px;
-        line-height: 1;
-        width: 100px;
       }
     }
     @media (min-width: 1439px) {
