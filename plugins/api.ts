@@ -8,6 +8,7 @@ interface ApiErrorResponse {
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
+  const route = useRoute();
 
   const api = $fetch.create({
     baseURL: config.public.apiUrl as string,
@@ -63,7 +64,7 @@ export default defineNuxtPlugin(() => {
           content: message
         }
       }).onDismiss(() => {
-        if (response.status === 401) {
+        if (response.status === 401 && route.fullPath !== '/admin-login') {
           navigateTo('/');
         }
       });

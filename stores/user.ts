@@ -100,7 +100,10 @@ export const useUserStore = defineStore('user', () => {
       if (response.pets?.length) {
         setSelectedPetById(userDefaultPet.value.pet_type_id);
       }
-    });
+    })
+      .catch(() => {
+        resetUser();
+      });
   }
 
   async function logout() {
